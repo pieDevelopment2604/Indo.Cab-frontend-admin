@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+/* ============================================================
+   INDO.CAB DESIGN SYSTEM - Theme Palette
+   Primary   : Teal       #1B6B5C
+   Secondary : Amber      #F4A300
+   Tertiary  : Terracotta #8E4E3E
+   Neutral   : Slate Gray #747876
+   ============================================================ */
+
+@theme {
+  /* ── Fonts ── */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  /* ── Primary - Teal ── */
+  --color-primary-50:  #edf7f5;
+  --color-primary-100: #d0ede8;
+  --color-primary-200: #a2dbd1;
+  --color-primary-300: #6dc4b8;
+  --color-primary-400: #3da899;
+  --color-primary-500: #1B6B5C;   /* brand base */
+  --color-primary-600: #155649;
+  --color-primary-700: #0f4037;
+  --color-primary-800: #092b25;
+  --color-primary-900: #041612;
+  --color-primary-950: #020b09;
+
+  /* ── Secondary - Amber ── */
+  --color-secondary-50:  #fff9eb;
+  --color-secondary-100: #feefc7;
+  --color-secondary-200: #fdd98a;
+  --color-secondary-300: #fcbe4d;
+  --color-secondary-400: #fba820;
+  --color-secondary-500: #F4A300;   /* brand base */
+  --color-secondary-600: #c07f00;
+  --color-secondary-700: #8f5e00;
+  --color-secondary-800: #5e3d00;
+  --color-secondary-900: #2f1f00;
+  --color-secondary-950: #170f00;
+
+  /* ── Tertiary - Terracotta ── */
+  --color-tertiary-50:  #faf2f0;
+  --color-tertiary-100: #f2ddd8;
+  --color-tertiary-200: #e5bbb1;
+  --color-tertiary-300: #d49184;
+  --color-tertiary-400: #be6e61;
+  --color-tertiary-500: #8E4E3E;   /* brand base */
+  --color-tertiary-600: #733e31;
+  --color-tertiary-700: #572f25;
+  --color-tertiary-800: #3b1f18;
+  --color-tertiary-900: #1f100c;
+  --color-tertiary-950: #0f0806;
+
+  /* ── Neutral - Slate Gray ── */
+  --color-neutral-50:  #f5f6f5;
+  --color-neutral-100: #e5e7e6;
+  --color-neutral-200: #cccfce;
+  --color-neutral-300: #adb1b0;
+  --color-neutral-400: #8e9391;
+  --color-neutral-500: #747876;   /* brand base */
+  --color-neutral-600: #5a5e5c;
+  --color-neutral-700: #424644;
+  --color-neutral-800: #2b2e2d;
+  --color-neutral-900: #161817;
+  --color-neutral-950: #0a0c0b;
+
+  /* ── Semantic Aliases ── */
+  --color-success-500: #22c55e;
+  --color-warning-500: #F4A300;
+  --color-danger-500:  #ef4444;
+  --color-info-500:    #3b82f6;
+
+  /* ── Border Radius ── */
+  --radius-xs:  2px;
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+  --shadow-dropdown: 0 4px 16px -2px rgb(0 0 0 / 0.12), 0 2px 6px -1px rgb(0 0 0 / 0.08);
+  --shadow-modal: 0 20px 60px -8px rgb(0 0 0 / 0.25);
+}
+
+/* CSS VARIABLES - Light Mode (default) */
+:root {
+  color-scheme: light dark;
+
+  /* Surfaces */
+  --bg-app:       #F5F6F5;
+  --bg-card:      #FFFFFF;
+  --bg-sidebar:   #0F2921;       /* very dark teal for sidebar */
+  --bg-topbar:    #FFFFFF;
+  --bg-input:     #FFFFFF;
+  --bg-muted:     #F0F2F1;
+
+  /* Text */
+  --text-primary:   #0F2921;
+  --text-secondary: #5a5e5c;
+  --text-muted:     #8e9391;
+  --text-inverse:   #FFFFFF;
+  --text-link:      #1B6B5C;
+
+  /* Borders */
+  --border-default: #E5E7E6;
+  --border-strong:  #CDD0CE;
+  --border-focus:   #1B6B5C;
+
+  /* Brand */
+  --brand-primary:   #1B6B5C;
+  --brand-secondary: #F4A300;
+  --brand-tertiary:  #8E4E3E;
+
+  /* Status */
+  --status-success-bg:  #f0fdf4;
+  --status-success-text:#15803d;
+  --status-warning-bg:  #fffbeb;
+  --status-warning-text:#b45309;
+  --status-danger-bg:   #fef2f2;
+  --status-danger-text: #dc2626;
+  --status-info-bg:     #eff6ff;
+  --status-info-text:   #1d4ed8;
+  --status-neutral-bg:  #f5f6f5;
+  --status-neutral-text:#5a5e5c;
+
+  /* Sidebar nav */
+  --sidebar-text:         rgba(255,255,255,0.65);
+  --sidebar-text-active:  #FFFFFF;
+  --sidebar-icon-active:  #F4A300;
+  --sidebar-item-hover:   rgba(255,255,255,0.06);
+  --sidebar-item-active:  rgba(244,163,0,0.15);
+}
+
+/* BASE RESET & GLOBAL STYLES */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TYPOGRAPHY SCALE */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+h1 { font-size: 2rem;    letter-spacing: -0.5px; }
+h2 { font-size: 1.5rem;  letter-spacing: -0.3px; }
+h3 { font-size: 1.25rem; letter-spacing: -0.2px; }
+h4 { font-size: 1.125rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; font-weight: 500; }
+
+p  { margin: 0; color: var(--text-secondary); }
+a  { color: var(--text-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* SCROLLBAR STYLING */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-muted); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* UTILITY CLASSES - Brand Tokens */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.badge-success  { background: var(--status-success-bg);  color: var(--status-success-text); }
+.badge-warning  { background: var(--status-warning-bg);  color: var(--status-warning-text); }
+.badge-danger   { background: var(--status-danger-bg);   color: var(--status-danger-text);  }
+.badge-info     { background: var(--status-info-bg);     color: var(--status-info-text);    }
+.badge-neutral  { background: var(--status-neutral-bg);  color: var(--status-neutral-text); }
+
+/* Sidebar nav hover */
+.sidebar-nav-item:hover {
+  background: var(--sidebar-item-hover) !important;
+  color: var(--sidebar-text-active) !important;
+}
+
+/* Header icon button hover */
+header button:hover {
+  background: var(--bg-muted) !important;
+}

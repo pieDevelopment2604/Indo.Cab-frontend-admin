@@ -1,0 +1,31 @@
+export const ROUTES = {
+  DASHBOARD: '/',
+  CLIENTS: '/clients',
+  VENDORS: '/vendors',
+  DRIVERS: '/drivers',
+  VEHICLES: '/vehicles',
+  BOOKINGS: '/bookings',
+  DISPATCH: '/dispatch',
+  TRACKING: '/tracking',
+  PRICING: '/pricing',
+  BILLING: '/billing',
+  SETTLEMENTS: '/settlements',
+  REPORTS: '/reports',
+  AUDIT: '/audit',
+} as const
+
+export const ROUTE_TITLES: Record<string, string> = {
+  [ROUTES.DASHBOARD]:   'Dashboard',
+  [ROUTES.CLIENTS]:     'Client Management',
+  [ROUTES.VENDORS]:     'Vendor Management',
+  [ROUTES.DRIVERS]:     'Driver Management',
+  [ROUTES.VEHICLES]:    'Vehicle Management',
+  [ROUTES.BOOKINGS]:    'Bookings',
+  [ROUTES.DISPATCH]:    'Dispatch Engine',
+  [ROUTES.TRACKING]:    'Live Tracking',
+  [ROUTES.PRICING]:     'Pricing Engine',
+  [ROUTES.BILLING]:     'Billing',
+  [ROUTES.SETTLEMENTS]: 'Settlements',
+  [ROUTES.REPORTS]:     'Reports',
+  [ROUTES.AUDIT]:       'Audit Logs',
+}
