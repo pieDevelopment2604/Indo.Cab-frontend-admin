@@ -1,21 +1,22 @@
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/store'
 import { hasPermission, type PermissionKey } from '@/constants/permissions'
-import type { UserRole } from '@/constants/roles'
+import { ROLES, normalizeRole, getRoleFromToken } from '@/constants/roles'
 
 export function usePermission() {
-  const user = useSelector((state: RootState) => state.auth.user)
-  const role = user?.role as UserRole | undefined
+  const auth = useSelector((state: RootState) => state.auth)
+  const rawRole = auth.user?.role || getRoleFromToken(auth.token)
+  const role = normalizeRole(rawRole)
 
   const checkPermission = (permission: PermissionKey): boolean => {
-    return hasPermission(role, permission)
+    return hasPermission(rawRole, permission)
   }
 
   return {
     role,
-    user,
+    user: auth.user,
     hasPermission: checkPermission,
-    isSuperAdmin: role === 'super_admin',
-    isOpsAdmin: role === 'ops_admin',
+    isSuperAdmin: role === ROLES.SUPER_ADMIN,
+    isOpsAdmin: role === ROLES.OPS_ADMIN,
   }
 }

@@ -3,7 +3,7 @@
 
 /* ============================================================
    INDO.CAB DESIGN SYSTEM - Theme Palette
-   Primary   : Teal       #1B6B5C
+   Primary   : Teal       #135c4e
    Secondary : Amber      #F4A300
    Tertiary  : Terracotta #8E4E3E
    Neutral   : Slate Gray #747876
@@ -20,12 +20,11 @@
   --color-primary-200: #a2dbd1;
   --color-primary-300: #6dc4b8;
   --color-primary-400: #3da899;
-  --color-primary-500: #1B6B5C;   /* brand base */
-  --color-primary-600: #155649;
-  --color-primary-700: #0f4037;
-  --color-primary-800: #092b25;
-  --color-primary-900: #041612;
-  --color-primary-950: #020b09;
+  --color-primary-500: #135c4e;   /* brand base */
+  --color-primary-600: #0e453b;
+  --color-primary-700: #092e27;
+  --color-primary-800: #051a16;
+  --color-primary-900: #020b09;
 
   /* ── Secondary - Amber ── */
   --color-secondary-50:  #fff9eb;
@@ -35,36 +34,6 @@
   --color-secondary-400: #fba820;
   --color-secondary-500: #F4A300;   /* brand base */
   --color-secondary-600: #c07f00;
-  --color-secondary-700: #8f5e00;
-  --color-secondary-800: #5e3d00;
-  --color-secondary-900: #2f1f00;
-  --color-secondary-950: #170f00;
-
-  /* ── Tertiary - Terracotta ── */
-  --color-tertiary-50:  #faf2f0;
-  --color-tertiary-100: #f2ddd8;
-  --color-tertiary-200: #e5bbb1;
-  --color-tertiary-300: #d49184;
-  --color-tertiary-400: #be6e61;
-  --color-tertiary-500: #8E4E3E;   /* brand base */
-  --color-tertiary-600: #733e31;
-  --color-tertiary-700: #572f25;
-  --color-tertiary-800: #3b1f18;
-  --color-tertiary-900: #1f100c;
-  --color-tertiary-950: #0f0806;
-
-  /* ── Neutral - Slate Gray ── */
-  --color-neutral-50:  #f5f6f5;
-  --color-neutral-100: #e5e7e6;
-  --color-neutral-200: #cccfce;
-  --color-neutral-300: #adb1b0;
-  --color-neutral-400: #8e9391;
-  --color-neutral-500: #747876;   /* brand base */
-  --color-neutral-600: #5a5e5c;
-  --color-neutral-700: #424644;
-  --color-neutral-800: #2b2e2d;
-  --color-neutral-900: #161817;
-  --color-neutral-950: #0a0c0b;
 
   /* ── Semantic Aliases ── */
   --color-success-500: #22c55e;
@@ -80,11 +49,6 @@
   --radius-xl:  16px;
   --radius-2xl: 24px;
   --radius-full: 9999px;
-
-  /* ── Shadows ── */
-  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
-  --shadow-dropdown: 0 4px 16px -2px rgb(0 0 0 / 0.12), 0 2px 6px -1px rgb(0 0 0 / 0.08);
-  --shadow-modal: 0 20px 60px -8px rgb(0 0 0 / 0.25);
 }
 
 /* CSS VARIABLES - Light Mode (default) */
@@ -94,7 +58,7 @@
   /* Surfaces */
   --bg-app:       #F5F6F5;
   --bg-card:      #FFFFFF;
-  --bg-sidebar:   #0F2921;       /* very dark teal for sidebar */
+  --bg-sidebar:   #0F2921;
   --bg-topbar:    #FFFFFF;
   --bg-input:     #FFFFFF;
   --bg-muted:     #F0F2F1;
@@ -104,36 +68,28 @@
   --text-secondary: #5a5e5c;
   --text-muted:     #8e9391;
   --text-inverse:   #FFFFFF;
-  --text-link:      #1B6B5C;
+  --text-link:      #135c4e;
 
   /* Borders */
   --border-default: #E5E7E6;
   --border-strong:  #CDD0CE;
-  --border-focus:   #1B6B5C;
+  --border-focus:   #135c4e;
 
   /* Brand */
-  --brand-primary:   #1B6B5C;
+  --brand-primary:   #135c4e;
   --brand-secondary: #F4A300;
-  --brand-tertiary:  #8E4E3E;
 
-  /* Status */
-  --status-success-bg:  #f0fdf4;
-  --status-success-text:#15803d;
+  /* Status Design System */
+  --status-success-bg:  #ecfdf5;
+  --status-success-text:#047857;
   --status-warning-bg:  #fffbeb;
   --status-warning-text:#b45309;
-  --status-danger-bg:   #fef2f2;
-  --status-danger-text: #dc2626;
+  --status-danger-bg:   #fff1f2;
+  --status-danger-text: #be123c;
   --status-info-bg:     #eff6ff;
   --status-info-text:   #1d4ed8;
-  --status-neutral-bg:  #f5f6f5;
-  --status-neutral-text:#5a5e5c;
-
-  /* Sidebar nav */
-  --sidebar-text:         rgba(255,255,255,0.65);
-  --sidebar-text-active:  #FFFFFF;
-  --sidebar-icon-active:  #F4A300;
-  --sidebar-item-hover:   rgba(255,255,255,0.06);
-  --sidebar-item-active:  rgba(244,163,0,0.15);
+  --status-neutral-bg:  #f1f5f9;
+  --status-neutral-text:#475569;
 }
 
 /* BASE RESET & GLOBAL STYLES */
@@ -162,48 +118,54 @@ body {
   flex-direction: column;
 }
 
-/* TYPOGRAPHY SCALE */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.25;
-}
-
-h1 { font-size: 2rem;    letter-spacing: -0.5px; }
-h2 { font-size: 1.5rem;  letter-spacing: -0.3px; }
-h3 { font-size: 1.25rem; letter-spacing: -0.2px; }
-h4 { font-size: 1.125rem; }
-h5 { font-size: 1rem; }
-h6 { font-size: 0.875rem; font-weight: 500; }
-
-p  { margin: 0; color: var(--text-secondary); }
-a  { color: var(--text-link); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
 /* SCROLLBAR STYLING */
 ::-webkit-scrollbar       { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-muted); }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-/* UTILITY CLASSES - Brand Tokens */
+/* UTILITY BADGE CLASSES - Project Status Tokens */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.badge-success  { background: var(--status-success-bg);  color: var(--status-success-text); }
-.badge-warning  { background: var(--status-warning-bg);  color: var(--status-warning-text); }
-.badge-danger   { background: var(--status-danger-bg);   color: var(--status-danger-text);  }
-.badge-info     { background: var(--status-info-bg);     color: var(--status-info-text);    }
-.badge-neutral  { background: var(--status-neutral-bg);  color: var(--status-neutral-text); }
+.badge-success {
+  background-color: #ecfdf5 !important;
+  color: #047857 !important;
+  border: 1px solid #a7f3d0 !important;
+}
+
+.badge-warning {
+  background-color: #fffbeb !important;
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+}
+
+.badge-danger {
+  background-color: #fff1f2 !important;
+  color: #be123c !important;
+  border: 1px solid #fecdd3 !important;
+}
+
+.badge-info {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+.badge-neutral {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1 !important;
+}
 
 /* Sidebar nav hover */
 .sidebar-nav-item:hover {
@@ -213,5 +175,5 @@ a:hover { text-decoration: underline; }
 
 /* Header icon button hover */
 header button:hover {
-  background: var(--bg-muted) !important;
+  background: var(--bg-muted);
 }

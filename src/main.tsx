@@ -6,12 +6,15 @@ import { store } from './store'
 import { queryClient } from './lib/queryClient'
 import './index.css'
 import App from './App.tsx'
+import RecaptchaProvider from './Providers/RecaptchaProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
+        <RecaptchaProvider>
         <App />
+        </RecaptchaProvider>
       </QueryClientProvider>
     </Provider>
   </StrictMode>,

@@ -1,6 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 import AppLayout from '@/components/common/AppLayout'
 import ProtectedRoute from '@/router/ProtectedRoute'
+import LoginPage from '@/components/auth/LoginPage'
+import DashboardPage from '@/features/dashboard/DashboardPage'
+import ClientManagementPage from '@/features/clients/ClientManagementPage'
+import VendorManagementPage from '@/features/vendors/VendorManagementPage'
 import { ROUTES, ROUTE_TITLES } from '@/constants/routes'
 
 const PlaceholderPage = ({ path }: { path: string }) => {
@@ -18,29 +22,22 @@ const PlaceholderPage = ({ path }: { path: string }) => {
 export const router = createBrowserRouter([
   {
     path: '/login',
-    element: (
-      <div style={{ padding: '40px', textAlign: 'center' }}>
-        <h2>Login Page Placeholder</h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
-          Please authenticate to access the admin portal.
-        </p>
-      </div>
-    ),
+    element: <LoginPage />,
   },
   {
     path: '/',
-    element: <ProtectedRoute />, 
+    element: <ProtectedRoute />,
     children: [
       {
         element: <AppLayout />,
         children: [
-          { index: true, element: <PlaceholderPage path={ROUTES.DASHBOARD} /> },
+          { index: true, element: <DashboardPage /> },
 
           // Client Management
           {
             element: <ProtectedRoute permission="CLIENTS_VIEW" />,
             children: [
-              { path: ROUTES.CLIENTS.substring(1), element: <PlaceholderPage path={ROUTES.CLIENTS} /> },
+              { path: ROUTES.CLIENTS.substring(1), element: <ClientManagementPage /> },
             ],
           },
 
@@ -48,8 +45,8 @@ export const router = createBrowserRouter([
           {
             element: <ProtectedRoute permission="VENDORS_VIEW" />,
             children: [
-              { path: ROUTES.VENDORS.substring(1), element: <PlaceholderPage path={ROUTES.VENDORS} /> },
-              { path: `${ROUTES.VENDORS.substring(1)}/:id`, element: <PlaceholderPage path={ROUTES.VENDORS} /> },
+              { path: ROUTES.VENDORS.substring(1), element: <VendorManagementPage /> },
+              { path: `${ROUTES.VENDORS.substring(1)}/:id`, element: <VendorManagementPage /> },
             ],
           },
 

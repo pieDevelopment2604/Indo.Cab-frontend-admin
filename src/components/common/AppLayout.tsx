@@ -23,9 +23,9 @@ export default function AppLayout() {
           transition: 'margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
-        <Header sidebarCollapsed={collapsed} />
+        <Header sidebarCollapsed={collapsed} onToggleSidebar={() => setCollapsed((c) => !c)} />
         <main className="main-content">
-          <div className="page-wrapper">
+          <div className="page-wrapper ">
             <Outlet />
           </div>
         </main>
