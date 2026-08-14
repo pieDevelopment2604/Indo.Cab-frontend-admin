@@ -54,7 +54,7 @@ function LiveTrackingTabComponent() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 -m-6 p-6 min-h-[calc(100vh-64px)] bg-neutral-50/50 text-neutral-900 font-sans">
+    <div className="flex flex-col gap-4 -m-6 p-6 min-h-[calc(100vh-64px)] bg-neutral-50/50 text-neutral-900">
       {/* Header Search & Title Bar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 rounded-lg bg-white border border-neutral-200 shadow-sm items-center">
         <div className="lg:col-span-7 relative lg:w-full sm:w-[480px] h-full">

@@ -1,4 +1,4 @@
-import { ROLES, normalizeRole, type UserRole } from './roles'
+import { ROLES, normalizeRole } from './roles'
 
 export const PERMISSIONS = {
   // Client Management
@@ -34,7 +34,5 @@ export type PermissionKey = keyof typeof PERMISSIONS
 export function hasPermission(role: string | null | undefined, permission: PermissionKey): boolean {
   const normalized = normalizeRole(role)
   const allowedRoles = (PERMISSIONS[permission] || []) as readonly string[]
-  const isAllowed = allowedRoles.includes(normalized)
-  console.log(`[hasPermission] permission: ${permission}, inputRole: "${role}", normalizedRole: "${normalized}", result: ${isAllowed}`)
-  return isAllowed
+  return allowedRoles.includes(normalized)
 }

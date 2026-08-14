@@ -10,7 +10,6 @@ import {
   BookOpen,
   Plus,
   X,
-  ShieldCheck,
   AlertCircle
 } from '@/utils/icons'
 
@@ -263,6 +262,8 @@ export default function ClientOnboardingWizard({
       pan_number: formData.pan_number,
       address: formData.address,
       operating_cities: formData.operating_cities.length > 0 ? formData.operating_cities : ['Bangalore'],
+      discount_percentage: 0,
+      city: formData.operating_cities[0] || formData.address || '',
       category: formData.category,
       status: 'active',
       monthlyBookingVolume: 0,
@@ -290,7 +291,6 @@ export default function ClientOnboardingWizard({
         status: 'Active'
       },
       bookingHistory: [],
-      createdDate: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
       createdAt: new Date().toISOString(),
       created_at: new Date().toISOString()
     }
@@ -370,7 +370,7 @@ export default function ClientOnboardingWizard({
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto font-sans pb-16">
+    <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto pb-16">
       {/* Top Navigation & Header */}
       <div>
         <button

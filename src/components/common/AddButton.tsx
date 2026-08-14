@@ -1,4 +1,3 @@
-import React from 'react'
 import { Plus } from '@/utils/icons'
 import PrimaryButton from './PrimaryButton'
 

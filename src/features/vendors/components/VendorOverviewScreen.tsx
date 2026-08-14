@@ -113,7 +113,7 @@ function VendorOverviewScreen({
       header: 'VENDOR PARTNER',
       cell: (vendor) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#1B6B5C] border border-teal-100 flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+          <div className="w-10 h-10 rounded-lg bg-teal-50 text-[#1B6B5C] border border-teal-100 flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
             {vendor.logo ? (
               <img src={vendor.logo} alt={vendor.name} className="w-full h-full object-cover" />
             ) : (
@@ -212,7 +212,7 @@ function VendorOverviewScreen({
   ]
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex-1 flex flex-col min-h-0 gap-6">
       {/* Section Breadcrumb & Title */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>

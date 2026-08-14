@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import type { CorporateClient } from "../types";
 import DataTable, { type Column } from "@/components/common/DataTable";
 import AddButton from "@/components/common/AddButton";
@@ -186,7 +186,7 @@ export default function ClientOverviewScreen({
                 <button
                   type="button"
                   onClick={() => onEditClientClick(client)}
-                  className="p-2 rounded-xl text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors cursor-pointer"
+                  className="p-2 rounded-lg text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors cursor-pointer"
                   title="Edit Corporate Client"
                 >
                   <Edit size={16} />
@@ -195,7 +195,7 @@ export default function ClientOverviewScreen({
               <button
                 type="button"
                 onClick={() => onToggleBlacklist(client.id)}
-                className={`p-2 rounded-xl transition-colors cursor-pointer ${
+                className={`p-2 rounded-lg transition-colors cursor-pointer ${
                   client.status === "suspended" || client.status === "blacklisted"
                     ? "text-emerald-600 hover:bg-emerald-50"
                     : "text-amber-500 hover:bg-amber-50"
@@ -211,7 +211,7 @@ export default function ClientOverviewScreen({
               <button
                 type="button"
                 onClick={() => onDeleteClient(client.id)}
-                className="p-2 rounded-xl text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
+                className="p-2 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
                 title="Delete Corporate Account"
               >
                 <Trash2 size={16} />
@@ -224,7 +224,7 @@ export default function ClientOverviewScreen({
   ];
 
   return (
-    <div className="flex flex-col gap-6 relative pb-16 font-sans">
+    <div className="flex-1 flex flex-col gap-6 relative min-h-0">
       {/* Header & Page Title with Reusable AddButton */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>

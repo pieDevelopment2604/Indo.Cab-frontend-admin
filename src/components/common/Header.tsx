@@ -11,7 +11,7 @@ interface HeaderProps {
   onToggleSidebar: () => void
 }
 
-export default function Header({ sidebarCollapsed, onToggleSidebar }: HeaderProps) {
+export default function Header({ sidebarCollapsed }: HeaderProps) {
   const location = useLocation()
 
   const pageTitle =
@@ -39,7 +39,7 @@ export default function Header({ sidebarCollapsed, onToggleSidebar }: HeaderProp
         <input
           type="text"
           placeholder="Search bookings, vendors, or fleets..."
-          className="flex-1 bg-transparent border-none outline-none text-xs text-gray-900 placeholder:text-slate-400 font-sans"
+          className="flex-1 bg-transparent border-none outline-none text-xs text-gray-900 placeholder:text-slate-400"
         />
         <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-white border border-gray-200 text-slate-400 font-mono whitespace-nowrap">
           ⌘K

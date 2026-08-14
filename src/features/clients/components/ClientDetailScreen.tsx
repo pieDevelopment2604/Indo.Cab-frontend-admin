@@ -1,5 +1,6 @@
-import React from 'react'
-import type { CorporateClient } from '../types'
+import type { CorporateClient, ClientBookingRecord } from '../types'
+import DataTable from '@/components/common/DataTable'
+import type { Column } from '@/components/common/DataTable'
 import {
   ArrowLeft,
   Building2,
@@ -34,8 +35,7 @@ export default function ClientDetailScreen({
   const panNumber = client.pan_number || (gstin.length >= 12 ? gstin.substring(2, 12) : 'N/A')
   const contactPerson = client.contactPerson || client.contact_person || 'Primary Contact'
   const email = client.email || 'N/A'
-  const phone = client.phone || client.mobile_number || 'N/A'
-  const rawDate = client.createdAt || client.created_at || client.createdDate
+  const rawDate = client.createdAt || client.created_at
   const createdDate = rawDate
     ? !isNaN(Date.parse(String(rawDate)))
       ? new Date(rawDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
@@ -43,6 +43,8 @@ export default function ClientDetailScreen({
     : new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
   const totalSpent = client.totalSpent || '₹0'
   const address = client.address || 'N/A'
+  // Discount from API
+  const discountPct = client.discount_percentage ?? 0
   // Contract fallbacks
   const contractTier = client.contract?.tierName || 'Corporate Standard'
   const baseRate = client.contract?.baseRatePerKm ?? 20
@@ -54,6 +56,28 @@ export default function ClientDetailScreen({
 
   // Booking history fallback
   const bookingHistory = client.bookingHistory || []
+
+  const bookingColumns: Column<ClientBookingRecord>[] = [
+    { header: 'BOOKING ID', accessorKey: 'id', className: 'font-mono font-bold text-neutral-900' },
+    { header: 'ROUTE', accessorKey: 'route', className: 'text-neutral-800' },
+    { header: 'DATE', accessorKey: 'bookingDate', className: 'text-neutral-500' },
+    { header: 'ASSIGNED VENDOR', accessorKey: 'assignedVendor', className: 'font-semibold text-[#1B6B5C]' },
+    {
+      header: 'STATUS',
+      cell: (bk) => (
+        <span
+          className={`px-2 py-0.5 rounded text-[9px] font-extrabold tracking-wider ${
+            bk.status === 'COMPLETED'
+              ? 'bg-emerald-100 text-emerald-800'
+              : 'bg-amber-100 text-amber-800'
+          }`}
+        >
+          {bk.status}
+        </span>
+      )
+    },
+    { header: 'TOTAL INVOICE', accessorKey: 'amount', align: 'right', className: 'font-extrabold text-neutral-900' }
+  ]
 
   return (
     <div className="flex flex-col gap-6">
@@ -83,7 +107,7 @@ export default function ClientDetailScreen({
             {onEditClientClick && (
               <button
                 onClick={() => onEditClientClick(client)}
-                className="px-4 py-2.5 bg-[#0D5C4D] hover:bg-[#094237] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-2 cursor-pointer"
+                className="px-4 py-2 bg-[#0D5C4D] hover:bg-[#094237] text-white font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-2 cursor-pointer"
               >
                 <Edit size={15} />
                 Edit Client
@@ -92,7 +116,7 @@ export default function ClientDetailScreen({
 
             <button
               onClick={() => onToggleBlacklist(String(client.id))}
-              className={`px-4 py-2.5 font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-2 cursor-pointer ${
+              className={`px-4 py-2 font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-2 cursor-pointer ${
                 client.status === 'blacklisted' || client.status === 'suspended'
                   ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                   : 'bg-amber-500 hover:bg-amber-600 text-white'
@@ -106,7 +130,7 @@ export default function ClientDetailScreen({
 
             <button
               onClick={() => onDeleteClient(client.id)}
-              className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-2 cursor-pointer"
             >
               <Trash2 size={15} />
               Delete Account
@@ -120,8 +144,8 @@ export default function ClientDetailScreen({
         {/* Left Column */}
         <div className="lg:col-span-4 flex flex-col gap-6">
           {/* Corporate Profile Card */}
-          <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs flex flex-col items-center text-center">
-            <div className="w-20 h-20 rounded-2xl bg-teal-50 text-[#1B6B5C] border border-teal-100 flex items-center justify-center font-extrabold text-2xl mb-4">
+          <div className="bg-white p-6 rounded-lg border border-neutral-200/80 shadow-sm flex flex-col items-center text-center">
+            <div className="w-20 h-20 rounded-lg bg-teal-50 text-[#1B6B5C] border border-teal-100 flex items-center justify-center font-extrabold text-2xl mb-4">
               <Building2 size={36} />
             </div>
 
@@ -171,14 +195,14 @@ export default function ClientDetailScreen({
               {onEditClientClick && (
                 <button
                   onClick={() => onEditClientClick(client)}
-                  className="w-full py-2.5 border border-neutral-200 hover:bg-neutral-50 text-neutral-800 font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full py-2 border border-neutral-200 hover:bg-neutral-50 text-neutral-800 font-bold text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Edit size={14} />
                   Edit Corporate Profile
                 </button>
               )}
 
-              <button className="w-full py-2.5 border border-neutral-200 hover:bg-neutral-50 text-neutral-800 font-bold text-xs rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2">
+              <button className="w-full py-2 border border-neutral-200 hover:bg-neutral-50 text-neutral-800 font-bold text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2">
                 <Mail size={14} /> Contact Manager ({email})
               </button>
             </div>
@@ -188,7 +212,7 @@ export default function ClientDetailScreen({
         {/* Right Column */}
         <div className="lg:col-span-8 flex flex-col gap-6">
           {/* Contract & Pricing Tier Breakdown Card */}
-          <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs flex flex-col gap-4">
+          <div className="bg-white p-6 rounded-lg border border-neutral-200/80 shadow-sm flex flex-col gap-4">
             <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
               <div className="flex items-center gap-2">
                 <Tag className="text-[#1B6B5C]" size={18} />
@@ -199,7 +223,7 @@ export default function ClientDetailScreen({
               </span>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-neutral-50/80 p-4 rounded-xl text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 bg-neutral-50/80 p-4 rounded-lg text-xs">
               <div>
                 <span className="text-[10px] font-bold text-neutral-400 uppercase block">BASE RATE / KM</span>
                 <span className="font-extrabold text-[#1B6B5C] text-lg">₹{baseRate}</span>
@@ -213,6 +237,11 @@ export default function ClientDetailScreen({
               <div>
                 <span className="text-[10px] font-bold text-neutral-400 uppercase block">NIGHT SURCHARGE</span>
                 <span className="font-extrabold text-neutral-900 text-lg">{nightSurcharge}%</span>
+              </div>
+
+              <div>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase block">DISCOUNT</span>
+                <span className="font-extrabold text-neutral-900 text-lg">{discountPct}%</span>
               </div>
 
               <div>
@@ -230,54 +259,20 @@ export default function ClientDetailScreen({
           </div>
 
           {/* Client Booking History */}
-          <div className="bg-white rounded-2xl border border-neutral-200/80 shadow-xs overflow-hidden">
+          <div className="bg-white rounded-lg border border-neutral-200/80 shadow-sm overflow-hidden flex flex-col">
             <div className="p-5 border-b border-neutral-100 flex justify-between items-center">
               <h3 className="text-base font-bold text-neutral-900">Recent Corporate Trips</h3>
               <span className="text-xs font-bold text-neutral-500">Total Spent: {totalSpent}</span>
             </div>
 
-            {bookingHistory.length === 0 ? (
-              <div className="p-8 text-center text-xs text-neutral-400 italic">
-                No past trips recorded for this corporate account.
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-neutral-50 text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-                      <th className="py-3 px-5">BOOKING ID</th>
-                      <th className="py-3 px-5">ROUTE</th>
-                      <th className="py-3 px-5">DATE</th>
-                      <th className="py-3 px-5">ASSIGNED VENDOR</th>
-                      <th className="py-3 px-5">STATUS</th>
-                      <th className="py-3 px-5 text-right">TOTAL INVOICE</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-100 text-xs font-medium text-neutral-800">
-                    {bookingHistory.map((bk) => (
-                      <tr key={bk.id} className="hover:bg-neutral-50/80">
-                        <td className="py-3.5 px-5 font-bold font-mono text-neutral-900">{bk.id}</td>
-                        <td className="py-3.5 px-5 text-neutral-800">{bk.route}</td>
-                        <td className="py-3.5 px-5 text-neutral-500">{bk.bookingDate}</td>
-                        <td className="py-3.5 px-5 font-semibold text-[#1B6B5C]">{bk.assignedVendor}</td>
-                        <td className="py-3.5 px-5">
-                          <span
-                            className={`px-2 py-0.5 rounded text-[9px] font-extrabold tracking-wider ${
-                              bk.status === 'COMPLETED'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-amber-100 text-amber-800'
-                            }`}
-                          >
-                            {bk.status}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-5 text-right font-extrabold text-neutral-900">{bk.amount}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <div className="flex-1 w-full flex p-0">
+              <DataTable<ClientBookingRecord>
+                data={bookingHistory}
+                columns={bookingColumns}
+                keyExtractor={(bk) => bk.id}
+                emptyMessage="No past trips recorded for this corporate account."
+              />
+            </div>
           </div>
         </div>
       </div>

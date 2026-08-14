@@ -17,8 +17,6 @@ export default function ProtectedRoute({ permission }: ProtectedRouteProps) {
   }
 
   if (permission && !hasPermission(permission)) {
-    console.log("permission", permission)
-    console.log("hasPermission", hasPermission(permission))
     return <Navigate to="/" replace />
   }
 

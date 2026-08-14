@@ -10,7 +10,7 @@ function DashboardPageComponent() {
   }, [navigate])
 
   return (
-    <div className="flex flex-col gap-6 w-full mx-auto font-sans min-h-screen">
+    <div className="flex flex-col gap-6 w-full mx-auto">
       <OverviewTab onNavigateToVendors={handleNavigateToVendors} />
     </div>
   )

@@ -64,7 +64,7 @@ export default function DataTable<T>({
   const hasToolbar = onSearchChange !== undefined || (filterOptions && filterOptions.length > 0) || actionButtons !== undefined
 
   return (
-    <div className="bg-white rounded-[16px] border border-neutral-200/70 shadow-sm overflow-hidden flex flex-col font-sans">
+    <div className="bg-white rounded-lg border border-neutral-200/70 shadow-sm overflow-hidden flex flex-col flex-1 min-h-[400px]">
       {/* Integrated Search, Filter Options & Actions Toolbar */}
       {hasToolbar && (
         <div className="px-5 py-3.5 border-b border-neutral-100 bg-white flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
@@ -165,10 +165,10 @@ export default function DataTable<T>({
         </div>
       ) : (
         /* Table Content */
-        <div className="overflow-x-auto">
+        <div className="flex-1 overflow-auto">
           <table className="w-full text-left border-collapse whitespace-nowrap">
             <thead>
-              <tr className="border-b border-neutral-100 text-[12px] font-medium text-neutral-400 bg-white">
+              <tr className="sticky top-0 z-10 bg-neutral-50/90 backdrop-blur-sm border-b border-neutral-200/80 shadow-[0_1px_0_rgba(0,0,0,0.02)] text-[11px] font-bold text-neutral-500 uppercase tracking-widest">
                 {columns.map((col, idx) => (
                   <th
                     key={idx}
@@ -182,19 +182,19 @@ export default function DataTable<T>({
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-neutral-100 text-[13px] font-medium text-neutral-700 bg-white">
+            <tbody className="divide-y divide-neutral-100 text-[13px] font-medium text-neutral-800 bg-white">
               {data.map((row) => (
                 <tr
                   key={keyExtractor(row)}
                   onClick={() => onRowClick && onRowClick(row)}
                   className={`transition-colors group ${
-                    onRowClick ? 'hover:bg-neutral-50/70 cursor-pointer' : ''
+                    onRowClick ? 'hover:bg-neutral-50/80 cursor-pointer' : 'hover:bg-neutral-50/50'
                   }`}
                 >
                   {columns.map((col, idx) => (
                     <td
                       key={idx}
-                      className={`py-3.5 px-5 ${col.className || ''} ${
+                      className={`py-4 px-6 ${col.className || ''} ${
                         col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
                       }`}
                     >

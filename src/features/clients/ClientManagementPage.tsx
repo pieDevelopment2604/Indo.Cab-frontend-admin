@@ -1,24 +1,25 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { usePermission } from '@/hooks/usePermission'
 import { clientApi } from '@/api/client.api'
 import type { CorporateClient } from './types'
-import { INITIAL_CLIENTS } from './types'
+import { mapApiClient } from './types'
 import ClientOverviewScreen from './components/ClientOverviewScreen'
-import ClientDetailScreen from './components/ClientDetailScreen'
 import ClientOnboardingWizard from './components/ClientOnboardingWizard'
 import ClientFormModal, { type ClientFormData } from './components/ClientFormModal'
 
+/**
+ * ClientManagementPage — rendered at /clients
+ * Shows the clients list/overview. Navigates to /clients/:id for detail.
+ */
 function ClientManagementPageComponent() {
   const { hasPermission, isSuperAdmin } = usePermission()
   const canManageClients = isSuperAdmin || hasPermission('CLIENTS_MANAGE')
+  const navigate = useNavigate()
 
-  // Screen View Mode: 'overview' | 'onboard' | 'detail'
-  const [clients, setClients] = useState<CorporateClient[]>(INITIAL_CLIENTS)
+  const [clients, setClients] = useState<CorporateClient[]>([])
   const [loading, setLoading] = useState(true)
-  const [viewMode, setViewMode] = useState<'overview' | 'onboard' | 'detail'>('overview')
-  const [selectedClient, setSelectedClient] = useState<CorporateClient | null>(
-    INITIAL_CLIENTS[0] ?? null
-  )
+  const [showOnboarding, setShowOnboarding] = useState(false)
 
   // Edit Modal State
   const [editingClient, setEditingClient] = useState<CorporateClient | null>(null)
@@ -46,18 +47,17 @@ function ClientManagementPageComponent() {
       try {
         setLoading(true)
         const response: any = await clientApi.getClients()
-        const fetchedList = Array.isArray(response)
+        const rawList: any[] = Array.isArray(response)
           ? response
-          : response?.data && Array.isArray(response.data)
+          : Array.isArray(response?.data)
           ? response.data
-          : null
+          : []
 
-        if (isMounted && fetchedList && fetchedList.length > 0) {
-          setClients(fetchedList)
-          setSelectedClient(fetchedList[0])
+        if (isMounted && rawList.length > 0) {
+          // Normalise raw API shape (uppercase status, snake_case) → CorporateClient
+          setClients(rawList.map(mapApiClient))
         }
-      } catch (err) {
-        // Log & gracefully retain INITIAL_CLIENTS fallback if backend API is offline
+      } catch {
         console.info('Client API endpoint not active, using cached client directory fallback.')
       } finally {
         if (isMounted) setLoading(false)
@@ -65,9 +65,7 @@ function ClientManagementPageComponent() {
     }
 
     fetchClientsFromApi()
-    return () => {
-      isMounted = false
-    }
+    return () => { isMounted = false }
   }, [])
 
   // Memoized filter clients logic
@@ -96,15 +94,9 @@ function ClientManagementPageComponent() {
   }, [clients, searchTerm, selectedCategoryFilter])
 
   // Handlers
-  const handleOpenDetail = useCallback((client: CorporateClient) => {
-    setSelectedClient(client)
-    setViewMode('detail')
-  }, [])
-
   const handleToggleBlacklist = useCallback(
     async (id: string | number) => {
       if (!canManageClients) return
-
       let targetStatus = 'suspended'
       setClients((prev) =>
         prev.map((c) => {
@@ -115,17 +107,10 @@ function ClientManagementPageComponent() {
           return c
         })
       )
-      setSelectedClient((prev) => {
-        if (prev && String(prev.id) === String(id)) {
-          return { ...prev, status: targetStatus as any }
-        }
-        return prev
-      })
-
       try {
         await clientApi.toggleStatus(id, targetStatus)
-      } catch (err) {
-        // Local state already updated
+      } catch {
+        // Local state already updated optimistically
       }
     },
     [canManageClients]
@@ -133,26 +118,23 @@ function ClientManagementPageComponent() {
 
   const handleClientAdded = useCallback((newClient: CorporateClient) => {
     setClients((prev) => [newClient, ...prev])
-  }, [])
+    setShowOnboarding(false)
+    navigate(`/clients/${newClient.id}`)
+  }, [navigate])
 
   const handleDeleteClient = useCallback(
     async (id: string | number) => {
       if (!canManageClients) return
+      // TODO: Replace with an in-app confirmation modal
       if (!window.confirm('Are you sure you want to delete this corporate client account?')) return
-
       setClients((prev) => prev.filter((c) => String(c.id) !== String(id)))
-      if (selectedClient && String(selectedClient.id) === String(id)) {
-        setViewMode('overview')
-        setSelectedClient(null)
-      }
-
       try {
         await clientApi.deleteClient(id)
-      } catch (err) {
-        console.warn('Backend deleteClient API call returned error:', err)
+      } catch {
+        console.warn('Backend deleteClient API call returned error')
       }
     },
-    [canManageClients, selectedClient]
+    [canManageClients]
   )
 
   const handleEditClientClick = useCallback((client: CorporateClient) => {
@@ -204,88 +186,51 @@ function ClientManagementPageComponent() {
       setClients((prev) =>
         prev.map((c) => (String(c.id) === String(editingClient.id) ? { ...c, ...updatedPayload } : c))
       )
-      setSelectedClient((prev) => (prev && String(prev.id) === String(editingClient.id) ? { ...prev, ...updatedPayload } : prev))
       setEditingClient(null)
 
       try {
         await clientApi.updateClient(editingClient.id, updatedPayload)
-      } catch (err) {
-        console.warn('Backend updateClient API call error:', err)
+      } catch {
+        console.warn('Backend updateClient API call error')
       }
     },
     [canManageClients, editingClient, clientFormData]
   )
 
-  const handleUpdateClient = useCallback(
-    async (id: string | number, updatedData: Partial<CorporateClient>) => {
-      if (!canManageClients) return
-
-      setClients((prev) =>
-        prev.map((c) => (String(c.id) === String(id) ? { ...c, ...updatedData } : c))
-      )
-      setSelectedClient((prev) => (prev && String(prev.id) === String(id) ? { ...prev, ...updatedData } : prev))
-
-      try {
-        await clientApi.updateClient(id, updatedData)
-      } catch (err) {
-        console.warn('Backend updateClient API call returned error:', err)
-      }
-    },
-    [canManageClients]
-  )
-
-  // Check empty state requirement: if no clients exist in state, present "Add New Client" onboarding screen directly!
   const isNoClientsAvailable = !loading && clients.length === 0
 
+  // Show onboarding wizard if no clients or explicitly triggered
+  if (!loading && (isNoClientsAvailable || showOnboarding)) {
+    return (
+      <ClientOnboardingWizard
+        onBackToOverview={() => setShowOnboarding(false)}
+        onClientAdded={handleClientAdded}
+      />
+    )
+  }
+
   return (
-    <div className="flex flex-col gap-6 w-full mx-auto font-sans min-h-screen">
-      {/* If no clients available or explicitly navigating to onboard wizard */}
-      {!loading && (isNoClientsAvailable || viewMode === 'onboard') && (
-        <ClientOnboardingWizard
-          onBackToOverview={() => {
-            if (clients.length > 0) {
-              setViewMode('overview')
-            }
-          }}
-          onClientAdded={handleClientAdded}
-        />
-      )}
+    <div className="flex flex-col gap-6 w-full h-full mx-auto flex-1">
+      <ClientOverviewScreen
+        clients={clients}
+        filteredClients={filteredClients}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        selectedCategoryFilter={selectedCategoryFilter}
+        onCategoryFilterChange={setSelectedCategoryFilter}
+        canManageClients={canManageClients}
+        onAddClientClick={() => setShowOnboarding(true)}
+        onClientDetailClick={(client) => navigate(`/clients/${client.id}`)}
+        onToggleBlacklist={handleToggleBlacklist}
+        onDeleteClient={handleDeleteClient}
+        onEditClientClick={handleEditClientClick}
+        isLoading={loading}
+      />
 
-      {/* Main Manage Clients Overview Dashboard */}
-      { !isNoClientsAvailable && viewMode === 'overview' && (
-        <ClientOverviewScreen
-          clients={clients}
-          filteredClients={filteredClients}
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          selectedCategoryFilter={selectedCategoryFilter}
-          onCategoryFilterChange={setSelectedCategoryFilter}
-          canManageClients={canManageClients}
-          onAddClientClick={() => setViewMode('onboard')}
-          onClientDetailClick={handleOpenDetail}
-          onToggleBlacklist={handleToggleBlacklist}
-          onDeleteClient={handleDeleteClient}
-          onEditClientClick={handleEditClientClick}
-          isLoading={loading}
-        />
-      )}
-
-      {/* Detail Screen */}
-      {!loading && !isNoClientsAvailable && viewMode === 'detail' && selectedClient && (
-        <ClientDetailScreen
-          client={selectedClient}
-          canManageClients={canManageClients}
-          onBackToOverview={() => setViewMode('overview')}
-          onToggleBlacklist={handleToggleBlacklist}
-          onDeleteClient={handleDeleteClient}
-          onEditClientClick={handleEditClientClick}
-        />
-      )}
-
-      {/* Edit Corporate Client Modal */}
+      {/* Edit Client Modal */}
       {editingClient && (
         <ClientFormModal
-          isOpen={editingClient !== null}
+          isOpen={true}
           editingClient={editingClient}
           formData={clientFormData}
           setFormData={setClientFormData}

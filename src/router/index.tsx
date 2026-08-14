@@ -4,7 +4,9 @@ import ProtectedRoute from '@/router/ProtectedRoute'
 import LoginPage from '@/components/auth/LoginPage'
 import DashboardPage from '@/features/dashboard/DashboardPage'
 import ClientManagementPage from '@/features/clients/ClientManagementPage'
+import ClientDetailPage from '@/features/clients/ClientDetailPage'
 import VendorManagementPage from '@/features/vendors/VendorManagementPage'
+import VendorDetailPage from '@/features/vendors/VendorDetailPage'
 import DispatchPage from '@/features/dispatch/DispatchPage'
 import TrackingPage from '@/features/tracking/TrackingPage'
 import { ROUTES, ROUTE_TITLES } from '@/constants/routes'
@@ -39,7 +41,8 @@ export const router = createBrowserRouter([
           {
             element: <ProtectedRoute permission="CLIENTS_VIEW" />,
             children: [
-              { path: ROUTES.CLIENTS.substring(1), element: <ClientManagementPage /> },
+              { path: ROUTES.CLIENTS.substring(1),          element: <ClientManagementPage /> },
+              { path: `${ROUTES.CLIENTS.substring(1)}/:id`, element: <ClientDetailPage /> },
             ],
           },
 
@@ -47,8 +50,8 @@ export const router = createBrowserRouter([
           {
             element: <ProtectedRoute permission="VENDORS_VIEW" />,
             children: [
-              { path: ROUTES.VENDORS.substring(1), element: <VendorManagementPage /> },
-              { path: `${ROUTES.VENDORS.substring(1)}/:id`, element: <VendorManagementPage /> },
+              { path: ROUTES.VENDORS.substring(1),          element: <VendorManagementPage /> },
+              { path: `${ROUTES.VENDORS.substring(1)}/:id`, element: <VendorDetailPage /> },
             ],
           },
 
@@ -125,4 +128,3 @@ export const router = createBrowserRouter([
     ],
   },
 ])
-

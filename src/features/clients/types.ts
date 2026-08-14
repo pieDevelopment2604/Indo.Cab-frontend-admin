@@ -1,3 +1,22 @@
+/**
+ * Raw shape returned by GET /api/v1/admin/clients and /admin/clients/:id
+ */
+export interface ApiClient {
+  id: number
+  company_name: string
+  contact_person: string
+  email: string
+  mobile_number: string
+  gst_number: string
+  pan_number: string
+  address: string
+  operating_cities: string[]
+  discount_percentage: number
+  /** API returns uppercase: "ACTIVE" | "INACTIVE" | "SUSPENDED" | "BLACKLISTED" */
+  status: string
+  created_at: string
+}
+
 export interface PricingContract {
   id: string
   tierName: 'Enterprise Premium' | 'Corporate Standard' | 'Custom Rate'
@@ -41,23 +60,33 @@ export interface RazorpayPaymentInfo {
   paidAt: string
 }
 
+/**
+ * Normalised front-end model — all fields camelCase, status lowercased.
+ * Created by mapApiClient() from ApiClient.
+ */
 export interface CorporateClient {
   id: string | number
+  // API snake_case mirrors (kept for backward-compat with existing components)
   company_name: string
-  companyName?: string
   contact_person: string
-  contactPerson?: string
-  email: string
   mobile_number: string
-  phone?: string
   gst_number: string
-  gstin?: string
   pan_number: string
   address: string
-  city?: string
   operating_cities: string[]
-  category: 'Corporate' | 'SME' | 'Inter-City'
+  discount_percentage: number
+  created_at: string
+  // Normalised camelCase aliases
+  companyName: string
+  contactPerson: string
+  email: string
+  phone: string
+  gstin: string
+  city: string
   status: 'active' | 'inactive' | 'suspended' | 'blacklisted'
+  createdAt: string
+  // Optional extended fields (not in list API, may come from detail API later)
+  category?: 'Corporate' | 'SME' | 'Inter-City'
   monthlyBookingVolume?: number
   totalSpent?: string
   billingDetails?: ClientBillingDetails
@@ -65,10 +94,38 @@ export interface CorporateClient {
   paymentInfo?: RazorpayPaymentInfo
   contract?: PricingContract
   bookingHistory?: ClientBookingRecord[]
-  createdDate?: string
-  createdAt?: string
-  created_at?: string
 }
 
-// Initial empty clients state - all data is dynamically fetched from backend API (/api/v1/admin/clients)
-export const INITIAL_CLIENTS: CorporateClient[] = []
+/**
+ * Maps a raw API client object → normalised CorporateClient.
+ * Handles uppercase status, snake_case fields, and missing keys.
+ */
+export function mapApiClient(raw: ApiClient): CorporateClient {
+  const statusRaw = (raw.status ?? '').toLowerCase()
+  const validStatuses = ['active', 'inactive', 'suspended', 'blacklisted'] as const
+  const status = (validStatuses.includes(statusRaw as any) ? statusRaw : 'inactive') as CorporateClient['status']
+
+  return {
+    id:                   raw.id,
+    // snake_case mirrors
+    company_name:         raw.company_name   || '',
+    contact_person:       raw.contact_person || '',
+    mobile_number:        raw.mobile_number  || '',
+    gst_number:           raw.gst_number     || '',
+    pan_number:           raw.pan_number     || '',
+    address:              raw.address        || '',
+    operating_cities:     Array.isArray(raw.operating_cities) ? raw.operating_cities : [],
+    discount_percentage:  Number(raw.discount_percentage ?? 0),
+    created_at:           raw.created_at     || '',
+    // camelCase aliases
+    companyName:          raw.company_name   || '',
+    contactPerson:        raw.contact_person || '',
+    email:                raw.email          || '',
+    phone:                raw.mobile_number  || '',
+    gstin:                raw.gst_number     || '',
+    city:                 raw.address        || (Array.isArray(raw.operating_cities) && raw.operating_cities[0]) || '',
+    status,
+    createdAt:            raw.created_at     || '',
+  }
+}
+

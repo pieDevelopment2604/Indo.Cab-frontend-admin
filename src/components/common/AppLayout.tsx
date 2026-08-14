@@ -34,7 +34,7 @@ export default function AppLayout() {
       >
         <Header sidebarCollapsed={collapsed} onToggleSidebar={() => setCollapsed((c) => !c)} />
         <main className="main-content" ref={mainContentRef}>
-          <div className="page-wrapper ">
+          <div className="page-wrapper">
             <Outlet />
           </div>
         </main>

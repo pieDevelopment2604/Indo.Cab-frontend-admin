@@ -338,7 +338,7 @@ export default function VendorOnboardingWizard({
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto font-sans pb-16">
+    <div className="flex flex-col gap-6 w-full max-w-6xl mx-auto pb-16">
       {/* Top Header & Breadcrumbs */}
       <div>
         <button

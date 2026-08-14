@@ -35,7 +35,7 @@ export default function ClientFormModal({
   if (!isOpen && !editingClient) return null
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn font-sans">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
       <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-neutral-200 flex flex-col gap-5">
         <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
           <h3 className="text-lg font-bold text-neutral-900">

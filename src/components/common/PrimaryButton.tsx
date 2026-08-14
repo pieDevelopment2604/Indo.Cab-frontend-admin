@@ -19,7 +19,7 @@ export default function PrimaryButton({
   ...props
 }: PrimaryButtonProps) {
   const baseStyles =
-    'inline-flex items-center justify-center font-bold rounded-xl transition-all cursor-pointer shrink-0 disabled:opacity-60 disabled:cursor-not-allowed'
+    'inline-flex items-center justify-center font-bold rounded-md transition-all cursor-pointer shrink-0 disabled:opacity-60 disabled:cursor-not-allowed'
 
   const sizeStyles = {
     sm: 'px-3 py-1.5 text-xs gap-1.5',
