@@ -12,7 +12,7 @@ import {
   Crosshair,
   Truck,
 } from "@/utils/icons";
-import { type ActiveTripDriver, SAMPLE_ACTIVE_DRIVERS } from "../types";
+import { type ActiveTripDriver, SAMPLE_ACTIVE_DRIVERS } from '../types'
 
 const mapContainerStyle = {
   width: "100%",

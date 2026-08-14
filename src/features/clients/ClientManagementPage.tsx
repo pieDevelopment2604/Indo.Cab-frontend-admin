@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { usePermission } from '@/hooks/usePermission'
-import { clientApi } from '@/api/Client.api'
+import { clientApi } from '@/api/client.api'
 import type { CorporateClient } from './types'
 import { INITIAL_CLIENTS } from './types'
 import ClientOverviewScreen from './components/ClientOverviewScreen'

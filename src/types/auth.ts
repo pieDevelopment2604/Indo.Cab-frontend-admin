@@ -9,6 +9,10 @@ export interface AuthResponse {
   user?: User;
   token: string;
   refresh_token: string;
+  role?: string;
+  username?: string;
+  name?: string;
+  token_type?: string;
 }
 
 export interface LoginCredentials {

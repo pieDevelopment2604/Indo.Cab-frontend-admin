@@ -10,7 +10,6 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ permission }: ProtectedRouteProps) {
   const token = useSelector((state: RootState) => state.auth.token)
-  console.log("token", token)
   const { hasPermission } = usePermission()
 
   if (!token) {

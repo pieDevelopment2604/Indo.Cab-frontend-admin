@@ -97,8 +97,10 @@ api.interceptors.response.use(
       const resData = response.data || {};
       const newAccessToken =
         resData.token ||
+        (resData as any).access_token ||
         (resData as any).accessToken ||
-        (resData as any).data?.token;
+        (resData as any).data?.token ||
+        (resData as any).data?.access_token;
       const newRefreshToken =
         resData.refresh_token ||
         (resData as any).refresh_token ||

@@ -5,7 +5,7 @@ export const authApi = {
   login: (credentials: any) =>
     apiClient.post<AuthResponse>("/auth/login", credentials),
   logout: () => apiClient.post("/auth/logout"),
-  refresh_token: () => apiClient.post("/auth/refresh"),
+  refresh_token: (data: { refresh_token: string }) => apiClient.post("/auth/refresh", data),
   forgotPassword: (data: { identifier: string; type: "email" | "mobile" }) =>
     apiClient.post("/auth/forgot-password", data),
   sendOtp: (data: { email: string }) => apiClient.post("/auth/send-otp", data),

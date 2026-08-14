@@ -4,11 +4,10 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types/auth";
 
 interface AuthState {
-  // user: User | null
+  user: User | null;
   token: string | null;
   refresh_token: string | null;
 }
-//
 
 const loadInitialState = (): AuthState => {
   try {
@@ -18,13 +17,13 @@ const loadInitialState = (): AuthState => {
       // Standardize reading both raw state object and legacy Zustand structure
       if (parsed.state) {
         return {
-          // user: parsed.state.user || null,
+          user: parsed.state.user || null,
           token: parsed.state.token || null,
           refresh_token: parsed.state.refresh_token || null,
         };
       }
       return {
-        // user: parsed.user || null,
+        user: parsed.user || null,
         token: parsed.token || null,
         refresh_token: parsed.refresh_token || null,
       };
@@ -49,12 +48,15 @@ const authSlice = createSlice({
         refresh_token: string;
       }>,
     ) => {
-      // state.user = action.payload.user
+      if (action.payload.user !== undefined) {
+        state.user = action.payload.user;
+      }
       state.token = action.payload.token;
       state.refresh_token = action.payload.refresh_token;
       localStorage.setItem("indocab-auth-storage", JSON.stringify(state));
     },
     clearAuth: (state) => {
+      state.user = null;
       state.token = null;
       state.refresh_token = null;
       localStorage.removeItem("indocab-auth-storage");

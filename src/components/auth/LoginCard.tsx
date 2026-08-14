@@ -98,9 +98,16 @@ export default function LoginCard({ onSuccess }: LoginCardProps) {
         recaptcha_token,
       });
 
+      const userObj = response.user || {
+        id: response.username || email,
+        email: response.username || email,
+        name: response.name || 'User',
+        role: response.role || 'user'
+      };
+
       dispatch(
         setAuth({
-          user: response.user,
+          user: userObj,
           token: response.token,
           refresh_token: response.refresh_token,
         }),
@@ -165,11 +172,12 @@ export default function LoginCard({ onSuccess }: LoginCardProps) {
     try {
       // Simulate Google auth linking to backend
       const response = await authApi.login({
-        email: "admin@indo.cab",
+        username: "admin@indo.cab",
         password: "google-sso-simulated",
       });
 
-      if (response.user?.role === "super_admin") {
+      const role = response.user?.role || response.role;
+      if (role === "super_admin" || role === "SUPERADMIN") {
         try {
           await authApi.sendOtp({ email: "admin@indo.cab" });
         } catch (otpSendError) {
