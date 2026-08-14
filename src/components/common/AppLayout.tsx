@@ -1,11 +1,20 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Header from './Header'
 import './layout.css'
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false)
+  const location = useLocation()
+  const mainContentRef = useRef<HTMLElement>(null)
+
+  // Reset scroll position on route change
+  useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({ top: 0, behavior: 'instant' })
+    }
+  }, [location.pathname])
 
   return (
     <div className="app-shell">
@@ -24,7 +33,7 @@ export default function AppLayout() {
         }}
       >
         <Header sidebarCollapsed={collapsed} onToggleSidebar={() => setCollapsed((c) => !c)} />
-        <main className="main-content">
+        <main className="main-content" ref={mainContentRef}>
           <div className="page-wrapper ">
             <Outlet />
           </div>

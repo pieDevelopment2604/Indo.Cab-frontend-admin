@@ -238,7 +238,7 @@ function ClientManagementPageComponent() {
   const isNoClientsAvailable = !loading && clients.length === 0
 
   return (
-    <div className="flex flex-col gap-6 p-6 w-full mx-auto font-sans min-h-screen">
+    <div className="flex flex-col gap-6 w-full mx-auto font-sans min-h-screen">
       {/* If no clients available or explicitly navigating to onboard wizard */}
       {!loading && (isNoClientsAvailable || viewMode === 'onboard') && (
         <ClientOnboardingWizard
@@ -266,6 +266,7 @@ function ClientManagementPageComponent() {
           onToggleBlacklist={handleToggleBlacklist}
           onDeleteClient={handleDeleteClient}
           onEditClientClick={handleEditClientClick}
+          isLoading={loading}
         />
       )}
 

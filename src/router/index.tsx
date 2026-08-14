@@ -5,6 +5,8 @@ import LoginPage from '@/components/auth/LoginPage'
 import DashboardPage from '@/features/dashboard/DashboardPage'
 import ClientManagementPage from '@/features/clients/ClientManagementPage'
 import VendorManagementPage from '@/features/vendors/VendorManagementPage'
+import DispatchPage from '@/features/dispatch/DispatchPage'
+import TrackingPage from '@/features/tracking/TrackingPage'
 import { ROUTES, ROUTE_TITLES } from '@/constants/routes'
 
 const PlaceholderPage = ({ path }: { path: string }) => {
@@ -74,7 +76,7 @@ export const router = createBrowserRouter([
           {
             element: <ProtectedRoute permission="DISPATCH_CONTROL" />,
             children: [
-              { path: ROUTES.DISPATCH.substring(1), element: <PlaceholderPage path={ROUTES.DISPATCH} /> },
+              { path: ROUTES.DISPATCH.substring(1), element: <DispatchPage /> },
             ],
           },
 
@@ -82,7 +84,7 @@ export const router = createBrowserRouter([
           {
             element: <ProtectedRoute permission="LIVE_TRACKING" />,
             children: [
-              { path: ROUTES.TRACKING.substring(1), element: <PlaceholderPage path={ROUTES.TRACKING} /> },
+              { path: ROUTES.TRACKING.substring(1), element: <TrackingPage /> },
             ],
           },
 

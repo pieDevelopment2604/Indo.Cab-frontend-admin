@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuth } from "@/store/authSlice";
-import { apiClient, authApi } from "@/api";
+import { authApi } from "@/api";
 import type { AuthResponse } from "@/types/auth";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 

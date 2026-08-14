@@ -26,9 +26,9 @@ function KpiCardComponent({
   borderStyle = 'border-neutral-200/80'
 }: KpiCardProps) {
   return (
-    <div className={`bg-white p-5 rounded-2xl border ${borderStyle} shadow-xs flex flex-col justify-between ${heightClass}`}>
+    <div className={`bg-white p-5 rounded-lg border ${borderStyle} shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between ${heightClass}`}>
       <div className="flex justify-between items-start">
-        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center ${iconStyle}`}>
+        <div className={`w-10 h-10 rounded-md border flex items-center justify-center ${iconStyle}`}>
           <Icon size={18} />
         </div>
         {badge && <span className={`text-[11px] ${badgeStyle}`}>{badge}</span>}

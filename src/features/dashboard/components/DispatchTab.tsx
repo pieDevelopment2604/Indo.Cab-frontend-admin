@@ -103,14 +103,14 @@ function DispatchTabComponent({
           {incomingBookings.map((booking) => (
             <div
               key={booking.id}
-              className={`bg-white p-5 rounded-2xl border shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all ${
-                booking.isUrgent ? 'border-2 border-red-500 bg-red-50/10' : 'border-neutral-200/80'
+              className={`bg-white p-5 rounded-lg border shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all hover:shadow-md ${
+                booking.isUrgent ? 'border-2 border-red-500 bg-red-50/10' : 'border-neutral-200'
               }`}
             >
               {/* Vehicle Type Icon & Label */}
               <div className="flex items-center gap-4 min-w-[200px]">
                 <div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 ${
+                  className={`w-12 h-12 rounded-md flex items-center justify-center text-xl shrink-0 ${
                     booking.isUrgent
                       ? 'bg-red-100 text-red-600'
                       : 'bg-teal-50 text-[#1B6B5C] border border-teal-100'
@@ -169,7 +169,7 @@ function DispatchTabComponent({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => onDeleteBooking(booking.id)}
-                    className="p-2 text-neutral-400 hover:text-red-600 hover:bg-neutral-100 rounded-lg cursor-pointer transition-colors"
+                    className="p-2 text-neutral-400 hover:text-red-600 hover:bg-neutral-100 rounded-md cursor-pointer transition-colors"
                     title="Delete booking"
                   >
                     <Trash2 size={16} />
@@ -177,10 +177,10 @@ function DispatchTabComponent({
 
                   <button
                     onClick={() => onAssignVendorClick(booking)}
-                    className={`px-4 py-2.5 rounded-xl font-bold text-xs shadow-xs transition-all cursor-pointer ${
+                    className={`px-4 py-2 rounded-md font-bold text-xs shadow-sm transition-all cursor-pointer ${
                       booking.isUrgent
                         ? 'bg-red-600 hover:bg-red-700 text-white'
-                        : 'bg-[#0D5C4D] hover:bg-[#094237] text-white'
+                        : 'bg-[#0D5C4D] hover:bg-[#094237] text-white border border-[#094237]'
                     }`}
                   >
                     {booking.isUrgent ? 'Assign Emergency' : 'Assign Vendor'}

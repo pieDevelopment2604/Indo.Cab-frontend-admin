@@ -31,7 +31,7 @@ const loadInitialState = (): AuthState => {
   } catch (e) {
     console.error("Failed to load auth state from localStorage", e);
   }
-  return { token: null, refresh_token: null };
+  return { user: null, token: null, refresh_token: null };
 };
 
 const initialState: AuthState = loadInitialState();

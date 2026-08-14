@@ -28,6 +28,7 @@ interface ClientOverviewScreenProps {
   onToggleBlacklist: (id: string | number) => void;
   onDeleteClient: (id: string | number) => void;
   onEditClientClick?: (client: CorporateClient) => void;
+  isLoading?: boolean;
 }
 
 export default function ClientOverviewScreen({
@@ -43,6 +44,7 @@ export default function ClientOverviewScreen({
   onToggleBlacklist,
   onDeleteClient,
   onEditClientClick,
+  isLoading,
 }: ClientOverviewScreenProps) {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -226,11 +228,7 @@ export default function ClientOverviewScreen({
       {/* Header & Page Title with Reusable AddButton */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-semibold text-neutral-500 mb-1">
-            <span>Admin</span>
-            <span>&rsaquo;</span>
-            <span className="text-[#135c4e] font-bold">Client Management</span>
-          </div>
+
           <h1 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
             Manage Clients
           </h1>
@@ -320,11 +318,12 @@ export default function ClientOverviewScreen({
           <button
             type="button"
             onClick={handleExportCsv}
-            className="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-bold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
+            className="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-bold text-[13px] rounded-md transition-all cursor-pointer flex items-center gap-2 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-200/60"
           >
             Export CSV
           </button>
         }
+        isLoading={isLoading}
         pagination={{
           currentPage,
           totalPages,

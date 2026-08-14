@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import type { CorporateClient, RazorpayPaymentInfo } from '../types'
-import { clientApi } from '@/api/Client.api'
+import { clientApi } from '@/api/client.api'
 import { validateGst, validatePan } from '@/utils/taxValidation'
 import {
   ArrowLeft,

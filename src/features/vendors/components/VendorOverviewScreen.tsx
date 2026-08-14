@@ -26,9 +26,10 @@ interface VendorOverviewScreenProps {
   onVendorDetailClick: (vendor: Vendor) => void
   onSuspendToggle: (id: string) => void
   onDeleteVendor: (id: string) => void
+  isLoading?: boolean
 }
 
-function VendorOverviewScreenComponent({
+function VendorOverviewScreen({
   vendors,
   filteredVendors,
   searchTerm,
@@ -39,9 +40,10 @@ function VendorOverviewScreenComponent({
   onAddVendorClick,
   onVendorDetailClick,
   onSuspendToggle,
-  onDeleteVendor
+  onDeleteVendor,
+  isLoading
 }: VendorOverviewScreenProps) {
-  // Pagination State
+  // Constants for pagination State
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
 
@@ -214,9 +216,7 @@ function VendorOverviewScreenComponent({
       {/* Section Breadcrumb & Title */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <div className="text-[11px] font-extrabold uppercase tracking-wider text-[#1B6B5C] mb-1">
-            ORGANIZATION / VENDOR NETWORK
-          </div>
+
           <h1 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
             Vendor Management
           </h1>
@@ -247,15 +247,16 @@ function VendorOverviewScreenComponent({
         emptyIcon={<Building2 size={28} />}
         searchQuery={searchTerm}
         onSearchChange={onSearchChange}
-        searchPlaceholder="Search vendor name, city, contact..."
+        searchPlaceholder="Search vendors by name, company, email..."
         filterOptions={[
           { key: 'all', label: 'All Vendors', count: vendors.length },
           { key: 'active', label: 'Active', count: vendors.filter((v) => v.status === 'active').length },
           { key: 'pending', label: 'Pending Approval', count: vendors.filter((v) => v.status === 'pending').length },
-          { key: 'suspended', label: 'Suspended', count: vendors.filter((v) => v.status === 'suspended').length },
+          { key: 'suspended', label: 'Suspended/Blacklist', count: vendors.filter((v) => ['suspended', 'blacklisted'].includes(v.status)).length }
         ]}
         selectedFilter={selectedStatusFilter}
         onFilterChange={onStatusFilterChange}
+        isLoading={isLoading}
         pagination={{
           currentPage,
           totalPages,
@@ -268,4 +269,4 @@ function VendorOverviewScreenComponent({
   )
 }
 
-export default React.memo(VendorOverviewScreenComponent)
+export default React.memo(VendorOverviewScreen)

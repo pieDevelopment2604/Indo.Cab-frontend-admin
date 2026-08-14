@@ -1,11 +1,9 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { usePermission } from '@/hooks/usePermission'
-import { ViewModeTabs } from '@/components/common'
 import { vendorApi } from '@/api'
 import type { Vendor } from './types'
 import VendorOverviewScreen from './components/VendorOverviewScreen'
 import VendorDetailScreen from './components/VendorDetailScreen'
-import AssignVendorScreen from './components/AssignVendorScreen'
 import VendorFormModal from './components/VendorFormModal'
 import VendorOnboardingWizard from './components/VendorOnboardingWizard'
 
@@ -227,28 +225,7 @@ function VendorManagementPageComponent() {
   }, [])
 
   return (
-    <div className="flex flex-col gap-6 p-6 w-full mx-auto font-sans min-h-screen">
-      {/* Top Header View Mode Switcher (Hidden when in full onboard wizard screen) */}
-      {viewMode !== 'onboard' && (
-        <ViewModeTabs<'overview' | 'detail' | 'assign'>
-          activeTab={viewMode}
-          onTabChange={setViewMode}
-          tabs={[
-            { id: 'overview', label: 'Vendor List' },
-            { id: 'detail', label: 'Vendor Detail View' },
-            { id: 'assign', label: 'Assign Vendor Screen' }
-          ]}
-        />
-      )}
-
-      {/* Loading state indicator */}
-      {loading && (
-        <div className="flex items-center justify-center p-8 bg-white rounded-2xl border border-neutral-200/80 text-xs font-bold text-neutral-400 gap-2">
-          <div className="w-4 h-4 rounded-full border-2 border-[#135c4e] border-t-transparent animate-spin" />
-          <span>Loading vendors directory...</span>
-        </div>
-      )}
-
+    <div className="flex flex-col gap-6 w-full mx-auto font-sans min-h-screen relative">
       {/* Onboarding Wizard View Mode */}
       {!loading && viewMode === 'onboard' && (
         <VendorOnboardingWizard
@@ -258,7 +235,7 @@ function VendorManagementPageComponent() {
       )}
 
       {/* Screen Views */}
-      {!loading && viewMode === 'overview' && (
+      {viewMode !== 'onboard' && (
         <VendorOverviewScreen
           vendors={vendors}
           filteredVendors={filteredVendors}
@@ -271,22 +248,27 @@ function VendorManagementPageComponent() {
           onVendorDetailClick={handleOpenDetail}
           onSuspendToggle={handleSuspendToggle}
           onDeleteVendor={handleDeleteVendor}
+          isLoading={loading}
         />
       )}
 
-      {!loading && viewMode === 'detail' && selectedVendor && (
-        <VendorDetailScreen
-          selectedVendor={selectedVendor}
-          canManageVendors={canManageVendors}
-          onBackToOverview={() => setViewMode('overview')}
-          onSuspendToggle={handleSuspendToggle}
-          onApproveVendor={handleApproveVendor}
-          onDeleteVendor={handleDeleteVendor}
-        />
-      )}
-
-      {!loading && viewMode === 'assign' && (
-        <AssignVendorScreen onBackToOverview={() => setViewMode('overview')} />
+      {/* Vendor Detail Drawer */}
+      {selectedVendor && viewMode === 'detail' && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs transition-opacity duration-300">
+          <div className="w-[600px] h-full bg-white shadow-2xl animate-slideInRight overflow-y-auto">
+            <VendorDetailScreen
+              selectedVendor={selectedVendor}
+              canManageVendors={canManageVendors}
+              onBackToOverview={() => {
+                setViewMode('overview')
+                setSelectedVendor(null)
+              }}
+              onSuspendToggle={handleSuspendToggle}
+              onApproveVendor={handleApproveVendor}
+              onDeleteVendor={handleDeleteVendor}
+            />
+          </div>
+        </div>
       )}
 
       {/* Edit Vendor Modal */}
