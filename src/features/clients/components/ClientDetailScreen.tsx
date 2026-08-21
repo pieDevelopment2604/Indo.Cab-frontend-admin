@@ -1,6 +1,7 @@
-import type { CorporateClient, ClientBookingRecord } from '../types'
-import DataTable from '@/components/common/DataTable'
-import type { Column } from '@/components/common/DataTable'
+import { StatusBadge } from "@/components/common";
+import type { CorporateClient, ClientBookingRecord } from "../types";
+import DataTable from "@/components/common/DataTable";
+import type { Column } from "@/components/common/DataTable";
 import {
   ArrowLeft,
   Building2,
@@ -9,16 +10,18 @@ import {
   Tag,
   CheckCircle,
   Trash2,
-  Edit
-} from '@/utils/icons'
+  Edit,
+  Phone,
+  MapPin,
+} from "@/utils/icons";
 
 interface ClientDetailScreenProps {
-  client: CorporateClient
-  canManageClients: boolean
-  onBackToOverview: () => void
-  onToggleBlacklist: (id: string | number) => void
-  onDeleteClient: (id: string | number) => void
-  onEditClientClick?: (client: CorporateClient) => void
+  client: CorporateClient;
+  canManageClients: boolean;
+  onBackToOverview: () => void;
+  onToggleBlacklist: (id: string | number) => void;
+  onDeleteClient: (id: string | number) => void;
+  onEditClientClick?: (client: CorporateClient) => void;
 }
 
 export default function ClientDetailScreen({
@@ -27,79 +30,80 @@ export default function ClientDetailScreen({
   onBackToOverview,
   onToggleBlacklist,
   onDeleteClient,
-  onEditClientClick
+  onEditClientClick,
 }: ClientDetailScreenProps) {
   // Safe field accessors to handle API payloads cleanly
-  const companyName = client.companyName || client.company_name || 'Corporate Entity'
-  const gstin = client.gstin || client.gst_number || 'N/A'
-  const panNumber = client.pan_number || (gstin.length >= 12 ? gstin.substring(2, 12) : 'N/A')
-  const contactPerson = client.contactPerson || client.contact_person || 'Primary Contact'
-  const email = client.email || 'N/A'
-  const rawDate = client.createdAt || client.created_at
-  const createdDate = rawDate
-    ? !isNaN(Date.parse(String(rawDate)))
-      ? new Date(rawDate).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
-      : String(rawDate)
-    : new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
-  const totalSpent = client.totalSpent || '₹0'
-  const address = client.address || 'N/A'
+  const companyName =
+    client.companyName || client.company_name || "Corporate Entity";
+  const contactPerson =
+    client.contactPerson || client.contact_person || "Primary Contact";
+  const email = client.email || "N/A";
+  const totalSpent = client.totalSpent || "₹0";
   // Discount from API
-  const discountPct = client.discount_percentage ?? 0
+  const discountPct = client.discount_percentage ?? 0;
   // Contract fallbacks
-  const contractTier = client.contract?.tierName || 'Corporate Standard'
-  const baseRate = client.contract?.baseRatePerKm ?? 20
-  const extraHourRate = client.contract?.extraHourRate ?? 150
-  const nightSurcharge = client.contract?.nightSurchargePercent ?? 15
-  const tollPolicy = client.contract?.tollPolicy || 'Billed to Client'
-  const contractStart = client.contract?.contractStart || 'Jan 01, 2026'
-  const contractEnd = client.contract?.contractEnd || 'Dec 31, 2026'
+  const contractTier = client.contract?.tierName || "Corporate Standard";
+  const baseRate = client.contract?.baseRatePerKm ?? 20;
+  const extraHourRate = client.contract?.extraHourRate ?? 150;
+  const nightSurcharge = client.contract?.nightSurchargePercent ?? 15;
+  const tollPolicy = client.contract?.tollPolicy || "Billed to Client";
+  const contractStart = client.contract?.contractStart || "Jan 01, 2026";
+  const contractEnd = client.contract?.contractEnd || "Dec 31, 2026";
 
   // Booking history fallback
-  const bookingHistory = client.bookingHistory || []
+  const bookingHistory = client.bookingHistory || [];
 
   const bookingColumns: Column<ClientBookingRecord>[] = [
-    { header: 'BOOKING ID', accessorKey: 'id', className: 'font-mono font-bold text-neutral-900' },
-    { header: 'ROUTE', accessorKey: 'route', className: 'text-neutral-800' },
-    { header: 'DATE', accessorKey: 'bookingDate', className: 'text-neutral-500' },
-    { header: 'ASSIGNED VENDOR', accessorKey: 'assignedVendor', className: 'font-semibold text-[#1B6B5C]' },
     {
-      header: 'STATUS',
-      cell: (bk) => (
-        <span
-          className={`px-2 py-0.5 rounded text-[9px] font-extrabold tracking-wider ${
-            bk.status === 'COMPLETED'
-              ? 'bg-emerald-100 text-emerald-800'
-              : 'bg-amber-100 text-amber-800'
-          }`}
-        >
-          {bk.status}
-        </span>
-      )
+      header: "BOOKING ID",
+      accessorKey: "id",
+      className: "font-mono font-bold text-neutral-900",
     },
-    { header: 'TOTAL INVOICE', accessorKey: 'amount', align: 'right', className: 'font-extrabold text-neutral-900' }
-  ]
+    { header: "ROUTE", accessorKey: "route", className: "text-neutral-800" },
+    {
+      header: "DATE",
+      accessorKey: "bookingDate",
+      className: "text-neutral-500",
+    },
+    {
+      header: "ASSIGNED VENDOR",
+      accessorKey: "assignedVendor",
+      className: "font-semibold text-[#1B6B5C]",
+    },
+    {
+      header: "STATUS",
+      cell: (bk) => <StatusBadge status={bk.status} />,
+    },
+    {
+      header: "TOTAL INVOICE",
+      accessorKey: "amount",
+      align: "right",
+      className: "font-extrabold text-neutral-900",
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
       {/* Breadcrumbs & Title */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-neutral-500 mb-1">
-            <button
-              onClick={onBackToOverview}
-              className="hover:text-neutral-900 cursor-pointer flex items-center gap-1"
-            >
-              <ArrowLeft size={13} /> Corporate Clients
-            </button>
-            <span>/</span>
-            <span className="text-neutral-900 font-bold">{companyName}</span>
-          </div>
-          <h1 className="text-2xl font-bold text-neutral-900 tracking-tight">
-            Client Account: {companyName}
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={onBackToOverview}
+            className="inline-flex items-normal gap-1.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700 transition-colors cursor-pointer w-fit"
+          >
+            <ArrowLeft size={13} />
+            All Clients 
+          </button>
+          <h1 className="text-2xl font-extrabold text-neutral-900 tracking-tight leading-tight">
+            {companyName}
           </h1>
-          <p className="text-xs text-neutral-500 mt-0.5">
-            Corporate SLA contracts, base rates, billing authorization, and booking history.
-          </p>
+          <div className="flex items-center gap-2 mt-0.5">
+            <StatusBadge
+              status={client.status}
+              pulse={client.status === "active"}
+            />
+            <span className="text-xs text-neutral-400">{companyName}</span>
+          </div>
         </div>
 
         {canManageClients && (
@@ -107,33 +111,29 @@ export default function ClientDetailScreen({
             {onEditClientClick && (
               <button
                 onClick={() => onEditClientClick(client)}
-                className="px-4 py-2 bg-[#0D5C4D] hover:bg-[#094237] text-white font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-2 cursor-pointer"
+                className="btn btn-submit"
               >
                 <Edit size={15} />
-                Edit Client
+                Edit
               </button>
             )}
 
             <button
               onClick={() => onToggleBlacklist(String(client.id))}
-              className={`px-4 py-2 font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-2 cursor-pointer ${
-                client.status === 'blacklisted' || client.status === 'suspended'
-                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                  : 'bg-amber-500 hover:bg-amber-600 text-white'
-              }`}
+              className={`btn ${client.status === "blacklisted" || client.status === "suspended" ? "btn-toggle" : "btn-warning"}`}
             >
               <ShieldAlert size={15} />
-              {client.status === 'blacklisted' || client.status === 'suspended'
-                ? 'Reactivate Corporate Account'
-                : 'Suspend Account'}
+              {client.status === "blacklisted" || client.status === "suspended"
+                ? "Re-activate"
+                : "Suspend"}
             </button>
 
             <button
               onClick={() => onDeleteClient(client.id)}
-              className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-lg shadow-xs transition-all flex items-center gap-2 cursor-pointer"
+              className="btn btn-delete"
             >
               <Trash2 size={15} />
-              Delete Account
+              Delete
             </button>
           </div>
         )}
@@ -142,81 +142,157 @@ export default function ClientDetailScreen({
       {/* Grid Layout: Left Column (Company Profile) | Right Column (Pricing Tier & Booking History) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column */}
-        <div className="lg:col-span-4 flex flex-col gap-6">
-          {/* Corporate Profile Card */}
-          <div className="bg-white p-6 rounded-lg border border-neutral-200/80 shadow-sm flex flex-col items-center text-center">
-            <div className="w-20 h-20 rounded-lg bg-teal-50 text-[#1B6B5C] border border-teal-100 flex items-center justify-center font-extrabold text-2xl mb-4">
-              <Building2 size={36} />
-            </div>
+       <div className="lg:col-span-4 flex flex-col gap-5">
+          {/* Identity Card */}
+          <div className="card overflow-hidden">
+            {/* Tinted banner */}
+            <div className="h-16 bg-gradient-to-r from-teal-700 to-teal-500" />
+            {/* Avatar */}
+            <div className="px-6 pb-6">
+              <div className="-mt-8 mb-4 w-16 h-16 rounded-xl bg-white border-2 border-white shadow-md text-[#1B6B5C] flex items-center justify-center">
+                <Building2 size={28} strokeWidth={1.5} />
+              </div>
+              <h2 className="text-base font-extrabold text-neutral-900">
+                {client.companyName}
+              </h2>
+              <p className="text-xs text-neutral-500 mt-0.5 mb-4">
+                {companyName}
+              </p>
 
-            <h3 className="text-lg font-bold text-neutral-900 tracking-tight">
-              {companyName}
-            </h3>
-
-            <span className="mt-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-extrabold uppercase tracking-wider rounded-full">
-              {client.status} ACCOUNT
-            </span>
-
-            <div className="w-full border-t border-neutral-100 my-5" />
-
-            <div className="w-full flex flex-col gap-3 text-xs text-left">
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-400 font-medium">Account ID</span>
-                <span className="font-bold text-neutral-900 font-mono">{String(client.id)}</span>
+              {/* Key contact info */}
+              <div className="flex flex-col gap-2.5">
+                <div className="flex items-center gap-2.5 text-xs text-neutral-700">
+                  <Mail size={13} className="text-neutral-400 shrink-0" />
+                  <span className="truncate">{email}</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs text-neutral-700">
+                  <Phone size={13} className="text-neutral-400 shrink-0" />
+                  <span>{client.phone}</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-xs text-neutral-700">
+                  <MapPin size={13} className="text-neutral-400 shrink-0" />
+                  <span>{client.address}</span>
+                </div>
               </div>
 
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-400 font-medium">GSTIN</span>
-                <span className="font-bold text-neutral-900 font-mono">{gstin}</span>
-              </div>
+              {/* Divider */}
+              <div className="border-t border-neutral-100 my-5" />
 
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-400 font-medium">PAN Number</span>
-                <span className="font-bold text-neutral-900 font-mono">{panNumber}</span>
-              </div>
+              {/* Detail fields — only the most important ones */}
+              <dl className="flex flex-col gap-3.5">
+                {[
+                  {
+                    label: "Client ID",
+                    value: String(client.id),
+                    mono: true,
+                  },
+                  { label: "Contact", value: contactPerson },
+                  { label: "GST Number", value: client.gst_number, mono: true },
+                  { label: "PAN Number", value: client.pan_number, mono: true },
+                  {
+                    label: "Commission Rate",
+                    value: `${client.contract?.baseRatePerKm}%`,
+                    highlight: true,
+                  },
+                ].map(({ label, value, mono, highlight }) => (
+                  <div
+                    key={label}
+                    className="flex justify-between items-baseline gap-2"
+                  >
+                    <dt className="text-xs text-neutral-400 font-medium shrink-0">
+                      {label}
+                    </dt>
+                    <dd
+                      className={`text-xs font-bold text-right truncate max-w-[160px] ${
+                        highlight
+                          ? "text-[#1B6B5C]"
+                          : mono
+                            ? "text-neutral-700 font-mono"
+                            : "text-neutral-800"
+                      }`}
+                    >
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
 
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-400 font-medium">Contact Person</span>
-                <span className="font-bold text-neutral-900">{contactPerson}</span>
-              </div>
+              {/* Divider */}
+              <div className="border-t border-neutral-100 my-5" />
 
-              <div className="flex justify-between items-start gap-2">
-                <span className="text-neutral-400 font-medium shrink-0">Address</span>
-                <span className="font-bold text-neutral-900 text-right truncate max-w-[180px]">{address}</span>
-              </div>
+              {/* Quick actions */}
 
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-400 font-medium">Onboarded</span>
-                <span className="font-bold text-neutral-900">{createdDate}</span>
-              </div>
-            </div>
-
-            <div className="w-full flex flex-col gap-2 mt-6">
-              {onEditClientClick && (
-                <button
-                  onClick={() => onEditClientClick(client)}
-                  className="w-full py-2 border border-neutral-200 hover:bg-neutral-50 text-neutral-800 font-bold text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <Edit size={14} />
-                  Edit Corporate Profile
+              <div className="grid grid-cols-2 gap-2">
+                <button className="btn btn-neutral">
+                  <Mail size={13} /> Email
                 </button>
-              )}
-
-              <button className="w-full py-2 border border-neutral-200 hover:bg-neutral-50 text-neutral-800 font-bold text-xs rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2">
-                <Mail size={14} /> Contact Manager ({email})
-              </button>
+                <button className="btn btn-neutral">
+                  <Phone size={13} /> Call
+                </button>
+              </div>
             </div>
           </div>
+
+          {/* Fleet Status Card */}
+          {/* <div className="bg-white rounded-xl border border-neutral-200/80 shadow-sm p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Truck size={15} className="text-[#1B6B5C]" />
+                <h3 className="text-sm font-bold text-neutral-900">
+                  Fleet Status
+                </h3>
+              </div>
+              <span className="text-xs font-bold text-neutral-400">
+                {selectedVendor.fleetSize} total
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-emerald-50 rounded-lg p-4 text-center">
+                <div className="text-2xl font-black text-emerald-700">
+                  {selectedVendor.activeCars}
+                </div>
+                <div className="text-[11px] font-semibold text-emerald-600 mt-1">
+                  Active
+                </div>
+              </div>
+              <div className="bg-neutral-50 rounded-lg p-4 text-center">
+                <div className="text-2xl font-black text-neutral-500">
+                  {selectedVendor.idleCars}
+                </div>
+                <div className="text-[11px] font-semibold text-neutral-400 mt-1">
+                  Idle
+                </div>
+              </div>
+            </div>
+
+            {selectedVendor.fleetSize > 0 && (
+              <div>
+                <div className="flex justify-between text-[11px] font-semibold text-neutral-500 mb-2">
+                  <span>Utilisation</span>
+                  <span className="font-bold text-[#1B6B5C]">{utilPct}%</span>
+                </div>
+                <div className="h-2 w-full bg-neutral-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-teal-500 to-emerald-400 rounded-full"
+                    style={{ width: `${Math.min(100, utilPct)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+          </div> */}
         </div>
 
         {/* Right Column */}
         <div className="lg:col-span-8 flex flex-col gap-6">
           {/* Contract & Pricing Tier Breakdown Card */}
-          <div className="bg-white p-6 rounded-lg border border-neutral-200/80 shadow-sm flex flex-col gap-4">
+          <div className="card p-6 flex flex-col gap-4">
             <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
               <div className="flex items-center gap-2">
                 <Tag className="text-[#1B6B5C]" size={18} />
-                <h3 className="text-base font-bold text-neutral-900">Contract & Pricing Tier Rates</h3>
+                <h3 className="text-base font-bold text-neutral-900">
+                  Contract & Pricing Tier Rates
+                </h3>
               </div>
               <span className="px-3 py-1 bg-teal-50 text-[#1B6B5C] border border-teal-200 text-xs font-bold rounded-lg">
                 {contractTier}
@@ -225,33 +301,56 @@ export default function ClientDetailScreen({
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 bg-neutral-50/80 p-4 rounded-lg text-xs">
               <div>
-                <span className="text-[10px] font-bold text-neutral-400 uppercase block">BASE RATE / KM</span>
-                <span className="font-extrabold text-[#1B6B5C] text-lg">₹{baseRate}</span>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase block">
+                  BASE RATE / KM
+                </span>
+                <span className="font-extrabold text-[#1B6B5C] text-lg">
+                  ₹{baseRate}
+                </span>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-neutral-400 uppercase block">EXTRA HOUR RATE</span>
-                <span className="font-extrabold text-neutral-900 text-lg">₹{extraHourRate}/hr</span>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase block">
+                  EXTRA HOUR RATE
+                </span>
+                <span className="font-extrabold text-neutral-900 text-lg">
+                  ₹{extraHourRate}/hr
+                </span>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-neutral-400 uppercase block">NIGHT SURCHARGE</span>
-                <span className="font-extrabold text-neutral-900 text-lg">{nightSurcharge}%</span>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase block">
+                  NIGHT SURCHARGE
+                </span>
+                <span className="font-extrabold text-neutral-900 text-lg">
+                  {nightSurcharge}%
+                </span>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-neutral-400 uppercase block">DISCOUNT</span>
-                <span className="font-extrabold text-neutral-900 text-lg">{discountPct}%</span>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase block">
+                  DISCOUNT
+                </span>
+                <span className="font-extrabold text-neutral-900 text-lg">
+                  {discountPct}%
+                </span>
               </div>
 
               <div>
-                <span className="text-[10px] font-bold text-neutral-400 uppercase block">TOLL POLICY</span>
-                <span className="font-bold text-neutral-800 text-xs mt-1 block">{tollPolicy}</span>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase block">
+                  TOLL POLICY
+                </span>
+                <span className="font-bold text-neutral-800 text-xs mt-1 block">
+                  {tollPolicy}
+                </span>
               </div>
             </div>
 
             <div className="flex justify-between items-center text-xs text-neutral-500 pt-1">
-              <span>Contract Period: <strong>{contractStart}</strong> to <strong>{contractEnd}</strong></span>
+              <span>
+                Contract Period: <strong>{contractStart}</strong> to{" "}
+                <strong>{contractEnd}</strong>
+              </span>
               <span className="font-bold text-emerald-600 flex items-center gap-1">
                 <CheckCircle size={13} /> SLA Active
               </span>
@@ -259,10 +358,14 @@ export default function ClientDetailScreen({
           </div>
 
           {/* Client Booking History */}
-          <div className="bg-white rounded-lg border border-neutral-200/80 shadow-sm overflow-hidden flex flex-col">
+          <div className="card overflow-hidden flex flex-col">
             <div className="p-5 border-b border-neutral-100 flex justify-between items-center">
-              <h3 className="text-base font-bold text-neutral-900">Recent Corporate Trips</h3>
-              <span className="text-xs font-bold text-neutral-500">Total Spent: {totalSpent}</span>
+              <h3 className="text-base font-bold text-neutral-900">
+                Recent Corporate Trips
+              </h3>
+              <span className="text-xs font-bold text-neutral-500">
+                Total Spent: {totalSpent}
+              </span>
             </div>
 
             <div className="flex-1 w-full flex p-0">
@@ -277,5 +380,5 @@ export default function ClientDetailScreen({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -23,10 +23,9 @@ function KpiCardComponent({
   icon: Icon,
   iconStyle = 'bg-teal-50 text-[#1B6B5C] border-teal-100',
   heightClass = 'h-36',
-  borderStyle = 'border-neutral-200/80'
 }: KpiCardProps) {
   return (
-    <div className={`bg-white p-5 rounded-lg border ${borderStyle} shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between ${heightClass}`}>
+    <div className={`card p-5 hover:shadow-md transition-shadow flex flex-col justify-between ${heightClass}`}>
       <div className="flex justify-between items-start">
         <div className={`w-10 h-10 rounded-md border flex items-center justify-center ${iconStyle}`}>
           <Icon size={18} />

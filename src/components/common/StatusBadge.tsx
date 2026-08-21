@@ -31,23 +31,23 @@ const getBadgeConfig = (statusText: string, variant?: StatusVariant) => {
   // GREEN (Active, Verified, Completed, Success, Approved, Paid)
   if (['active', 'verified', 'completed', 'success', 'approved', 'paid', 'live'].includes(key)) {
     return {
-      badgeClass: 'badge-success',
+      badgeClass: 'status-success',
       dotClass: 'bg-[#047857]'
     }
   }
 
-  // AMBER/ORANGE (Pending, Warning, In Progress, Review)
-  if (['pending', 'warning', 'in_progress', 'in progress', 'processing', 'review'].includes(key)) {
+  // AMBER/ORANGE (Pending, Warning, In Progress, Review, Suspended)
+  if (['pending', 'warning', 'in_progress', 'in progress', 'processing', 'review', 'suspended', 'suspend'].includes(key)) {
     return {
-      badgeClass: 'badge-warning',
+      badgeClass: 'status-warning',
       dotClass: 'bg-[#b45309]'
     }
   }
 
-  // RED (Suspended, Blacklisted, Rejected, Danger, Cancelled, Failed, Expired)
-  if (['suspended', 'blacklisted', 'rejected', 'danger', 'cancelled', 'failed', 'expired'].includes(key)) {
+  // RED (Blacklisted, Rejected, Danger, Cancelled, Failed, Expired)
+  if (['blacklisted', 'rejected', 'danger', 'cancelled', 'failed', 'expired'].includes(key)) {
     return {
-      badgeClass: 'badge-danger',
+      badgeClass: 'status-danger',
       dotClass: 'bg-[#be123c]'
     }
   }
@@ -55,14 +55,14 @@ const getBadgeConfig = (statusText: string, variant?: StatusVariant) => {
   // BLUE (Info)
   if (['info'].includes(key)) {
     return {
-      badgeClass: 'badge-info',
+      badgeClass: 'status-info',
       dotClass: 'bg-[#1d4ed8]'
     }
   }
 
   // GRAY (Inactive, Neutral, Draft)
   return {
-    badgeClass: 'badge-neutral',
+    badgeClass: 'status-neutral',
     dotClass: 'bg-[#475569]'
   }
 }
@@ -77,7 +77,7 @@ function StatusBadgeComponent({
   const { badgeClass, dotClass } = getBadgeConfig(status, variant)
 
   return (
-    <span className={`badge ${badgeClass} ${className}`}>
+    <span className={`${badgeClass} ${className} inline-flex items-center gap-1.5`}>
       {showDot && (
         <span
           className={`w-1.5 h-1.5 rounded-full shrink-0 ${dotClass} ${
@@ -85,7 +85,7 @@ function StatusBadgeComponent({
           }`}
         />
       )}
-      <span>{status}</span>
+      <span className="capitalize">{status}</span>
     </span>
   )
 }

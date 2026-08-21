@@ -36,12 +36,17 @@ export default function ClientFormModal({
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-neutral-200 flex flex-col gap-5">
+      <div className="card max-w-lg w-full p-6 shadow-2xl flex flex-col gap-5">
         <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
           <h3 className="text-lg font-bold text-neutral-900">
             {editingClient ? `Edit Corporate Client (${editingClient.id})` : 'Onboard New Corporate Client'}
           </h3>
-          <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600 cursor-pointer p-1">
+          <button
+            type="button"
+            onClick={onClose}
+            className="icon-btn icon-btn-sm text-neutral-400 hover:text-neutral-600"
+            title="Close Modal"
+          >
             <X size={18} />
           </button>
         </div>
@@ -175,13 +180,13 @@ export default function ClientFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 hover:bg-neutral-100 transition-colors cursor-pointer"
+              className="btn btn-neutral"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-[#0D5C4D] hover:bg-[#094237] text-white transition-colors cursor-pointer"
+              className="btn btn-submit"
             >
               {editingClient ? 'Save Changes' : 'Onboard Client'}
             </button>

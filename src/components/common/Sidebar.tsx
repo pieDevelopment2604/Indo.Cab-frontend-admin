@@ -89,9 +89,22 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
     })
   }, [collapsed, location.pathname])
 
+  const handleSidebarClick = (e: React.MouseEvent) => {
+    if (!collapsed) return
+    const target = e.target as HTMLElement
+    if (
+      target.closest('.sidebar-item') ||
+      target.closest('[data-profile-section]')
+    ) {
+      return
+    }
+    onToggle()
+  }
+
   return (
     <aside
-      className="sidebar"
+      className={`sidebar ${collapsed ? 'cursor-pointer' : ''}`}
+      onClick={handleSidebarClick}
       style={{
         width: collapsed ? 64 : 256,
         transition: 'width 0.22s cubic-bezier(0.4, 0, 0.2, 1)'
@@ -142,19 +155,20 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
 
       {/* Profile Card at Sidebar Bottom */}
       <div
-        className="border-t border-neutral-200/80 p-2 flex flex-col gap-2 relative"
+        data-profile-section
+        className="border-t border-neutral-200/80 p-2 flex flex-col gap-2 relative cursor-default"
         ref={menuRef}
       >
         {/* Profile Popover Menu */}
         {isProfileMenuOpen && (
           <div
-            className={`absolute bottom-[calc(100%+8px)] left-2 right-2 bg-white border border-neutral-200 rounded-2xl shadow-xl z-50 animate-fadeIn flex flex-col gap-1 ${
+            className={`absolute bottom-[calc(100%+6px)] left-2 right-2 bg-white border border-neutral-200 rounded-lg shadow-xl z-50 animate-fadeIn flex flex-col gap-1 ${
               collapsed ? 'p-1.5 items-center' : 'p-2'
             }`}
           >
             {!collapsed && (
               <div className="p-2 border-b border-neutral-100 flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#0D5C4D] text-white font-extrabold text-xs flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-[#0D5C4D] text-white font-extrabold text-xs flex items-center justify-center">
                   SA
                 </div>
                 <div className="flex flex-col min-w-0 text-left">
@@ -170,7 +184,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
                 type="button"
                 onClick={() => handleAction(path)}
                 title={collapsed ? label : undefined}
-                className={`w-full rounded-xl transition-colors cursor-pointer text-left flex items-center gap-2.5 ${
+                className={`w-full rounded-lg transition-colors cursor-pointer text-left flex items-center gap-2.5 ${
                   collapsed
                     ? 'p-2 justify-center text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
                     : 'px-3 py-2 text-xs font-semibold text-neutral-700 hover:bg-neutral-100'
@@ -187,11 +201,9 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
               type="button"
               onClick={handleLogout}
               title={collapsed ? 'Log Out' : undefined}
-              className={`w-full rounded-xl font-bold bg-red-500 hover:bg-red-600 text-white transition-colors cursor-pointer shadow-xs flex items-center gap-2.5 ${
-                collapsed
-                  ? 'p-2 justify-center'
-                  : 'px-3 py-2 text-xs'
-              }`}
+              className={`btn btn-delete w-full ${
+                collapsed ? 'p-1.5 justify-center' : 'justify-start'
+              }`} 
             >
               <LogOut size={collapsed ? 16 : 14} />
               {!collapsed && <span>Log Out</span>}
@@ -202,7 +214,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
         {/* Profile Card Button */}
         <button
           onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-          className={`w-full p-2 rounded-xl border transition-all cursor-pointer flex items-center text-left group ${
+          className={`w-full p-2 rounded-lg border transition-all cursor-pointer flex items-center text-left group ${
             collapsed ? 'justify-center ' : 'justify-between '
           } ${
             isProfileMenuOpen
@@ -212,7 +224,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
           title={collapsed ? 'Admin Profile' : undefined}
         >
           <div className="flex items-center min-w-0">
-            <div className="w-8 h-8 rounded-xl bg-[#0D5C4D] text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+            <div className="w-8 h-8 rounded-lg bg-[#0D5C4D] text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-2xs">
               SA
             </div>
             <div className={`flex flex-col leading-tight overflow-hidden transition-all duration-300 ${collapsed ? 'max-w-0 opacity-0 ml-0' : 'max-w-[150px] opacity-100 ml-2.5'}`}>

@@ -247,7 +247,7 @@ export default function ClientOnboardingWizard({
       paidAt: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
     }
 
-    const newId = `CL-${Math.floor(8000 + Math.random() * 999)}-${(formData.company_name || 'CLI').substring(0, 3).toUpperCase()}`
+    const newId = Math.floor(8000 + Math.random() * 999).toString();
     const newClient: CorporateClient = {
       id: newId,
       company_name: formData.company_name,
@@ -390,7 +390,7 @@ export default function ClientOnboardingWizard({
       {/* Main Grid: Stepper + Form + Side Widgets */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Vertical Stepper Navigation (Sticky) */}
-        <div className="lg:col-span-3 sticky top-2 flex flex-col gap-6 bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs">
+        <div className="lg:col-span-3 sticky top-2 flex flex-col gap-6 card p-5">
           <div className="flex flex-col gap-6 relative">
             {/* Step 1 */}
             <div className="flex items-start gap-3.5 relative">
@@ -458,7 +458,7 @@ export default function ClientOnboardingWizard({
         </div>
 
         {/* Center Column: Step Form Container */}
-        <div className="lg:col-span-6 bg-white p-7 rounded-2xl border border-neutral-200/80 shadow-2xs">
+        <div className="lg:col-span-6 card p-7">
           {/* STEP 1: CLIENT DETAILS */}
           {currentStep === 1 && (
             <form onSubmit={handleNextStep} className="flex flex-col gap-6">
@@ -674,7 +674,7 @@ export default function ClientOnboardingWizard({
                     <button
                       type="button"
                       onClick={() => handleAddCity(cityInput)}
-                      className="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold rounded-xl cursor-pointer"
+                      className="btn btn-neutral"
                     >
                       <Plus size={14} />
                     </button>
@@ -703,13 +703,13 @@ export default function ClientOnboardingWizard({
                 <button
                   type="button"
                   onClick={onBackToOverview}
-                  className="px-5 py-2.5 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors cursor-pointer"
+                  className="btn btn-neutral"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-xs font-bold bg-[#135c4e] hover:bg-[#0e453b] text-white rounded-xl shadow-xs transition-colors cursor-pointer"
+                  className="btn btn-submit"
                 >
                   Continue to Billing Details &rarr;
                 </button>
@@ -807,14 +807,14 @@ export default function ClientOnboardingWizard({
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="px-5 py-2.5 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors cursor-pointer"
+                  className="btn btn-neutral"
                 >
                   &larr; Back to Client Identity
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-7 py-3 text-xs font-extrabold bg-[#135c4e] hover:bg-[#0e453b] text-white rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2 disabled:opacity-60"
+                  className="btn btn-submit"
                 >
                   {isSubmitting ? (
                     <>
@@ -902,7 +902,7 @@ export default function ClientOnboardingWizard({
                 <button
                   type="button"
                   onClick={handleResetWizard}
-                  className="px-5 py-2.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center gap-2"
+                  className="btn btn-neutral"
                 >
                   <Plus size={15} /> Onboard Another Client
                 </button>
@@ -910,7 +910,7 @@ export default function ClientOnboardingWizard({
                 <button
                   type="button"
                   onClick={onBackToOverview}
-                  className="px-6 py-2.5 bg-[#135c4e] hover:bg-[#0e453b] text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
+                  className="btn btn-submit"
                 >
                   Manage All Clients &rarr;
                 </button>
@@ -922,7 +922,7 @@ export default function ClientOnboardingWizard({
         {/* Right Column: Validation & Guide Widgets (Sticky) */}
         <div className="lg:col-span-3 sticky top-2 flex flex-col gap-5">
           {/* Validation Widget */}
-          <div className="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs flex flex-col gap-3.5">
+          <div className="card p-5 flex flex-col gap-3.5">
             <div className="flex items-center gap-2 text-xs font-extrabold text-neutral-800">
               <CheckCircle size={15} className="text-[#135c4e]" />
               <span>Validation</span>

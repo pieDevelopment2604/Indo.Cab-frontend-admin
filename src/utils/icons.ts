@@ -38,6 +38,7 @@ export {
   Trash2,
   Filter,
   Check,
+  PhoneCall,
   X,
   ShieldAlert,
   Building,
@@ -85,5 +86,6 @@ export {
   FileCheck,
   CheckCircle2,
   UploadCloud,
+  Shield
 } from "lucide-react";
 

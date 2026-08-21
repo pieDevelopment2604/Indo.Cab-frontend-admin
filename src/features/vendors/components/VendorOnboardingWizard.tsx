@@ -365,7 +365,7 @@ export default function VendorOnboardingWizard({
       {/* Main Container Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Vertical Stepper Navigation (Sticky) */}
-        <div className="lg:col-span-3 sticky top-4 flex flex-col gap-6 bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs">
+        <div className="lg:col-span-3 sticky top-4 flex flex-col gap-6 card p-5">
           <div className="flex flex-col gap-6 relative">
             {/* Step 1 */}
             <div className="flex items-start gap-3.5 relative">
@@ -456,7 +456,7 @@ export default function VendorOnboardingWizard({
         </div>
 
         {/* Center / Right Column: Step Forms */}
-        <div className="lg:col-span-9 bg-white p-8 rounded-2xl border border-neutral-200/80 shadow-2xs">
+        <div className="lg:col-span-9 card p-8 flex flex-col gap-6">
           {/* STEP 1: PARTNER IDENTITY & LOGO */}
           {currentStep === 1 && (
             <form onSubmit={handleNextToStep2} className="flex flex-col gap-6">
@@ -671,13 +671,13 @@ export default function VendorOnboardingWizard({
                 <button
                   type="button"
                   onClick={onBackToOverview}
-                  className="px-5 py-2.5 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors cursor-pointer"
+                  className="btn btn-neutral"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-xs font-bold bg-[#0D5C4D] hover:bg-[#094237] text-white rounded-xl shadow-xs transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="btn btn-submit"
                 >
                   Configure Fleet & Categories &rarr;
                 </button>
@@ -840,7 +840,7 @@ export default function VendorOnboardingWizard({
                   <button
                     type="button"
                     onClick={() => handleAddCity(cityInput)}
-                    className="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold rounded-xl cursor-pointer"
+                    className="btn btn-neutral"
                   >
                     + Add City
                   </button>
@@ -852,13 +852,13 @@ export default function VendorOnboardingWizard({
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="px-5 py-2.5 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors cursor-pointer"
+                  className="btn btn-neutral"
                 >
                   &larr; Back to Identity
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 text-xs font-bold bg-[#0D5C4D] hover:bg-[#094237] text-white rounded-xl shadow-xs transition-colors cursor-pointer flex items-center gap-1.5"
+                  className="btn btn-submit"
                 >
                   Proceed to Bank & Documents &rarr;
                 </button>
@@ -1051,18 +1051,18 @@ export default function VendorOnboardingWizard({
                 <button
                   type="button"
                   onClick={() => setCurrentStep(2)}
-                  className="px-5 py-2.5 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors cursor-pointer"
+                  className="btn btn-neutral"
                 >
                   &larr; Back to Fleet Setup
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || !slaAccepted}
-                  className="px-7 py-3 text-xs font-extrabold bg-[#0D5C4D] hover:bg-[#094237] text-white rounded-xl shadow-md transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                  className="btn btn-submit"
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      <div className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
                       Activating Partner...
                     </>
                   ) : (
@@ -1137,7 +1137,7 @@ export default function VendorOnboardingWizard({
                 <button
                   type="button"
                   onClick={onBackToOverview}
-                  className="px-6 py-2.5 bg-[#0D5C4D] hover:bg-[#094237] text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
+                  className="btn btn-submit"
                 >
                   Return to Vendor Directory
                 </button>
@@ -1157,7 +1157,7 @@ export default function VendorOnboardingWizard({
                     setCreatedVendor(null)
                     setCurrentStep(1)
                   }}
-                  className="px-5 py-2.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                  className="btn btn-neutral"
                 >
                   + Add Another Vendor
                 </button>

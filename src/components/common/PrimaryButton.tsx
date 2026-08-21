@@ -12,38 +12,29 @@ export default function PrimaryButton({
   children,
   icon,
   variant = 'primary',
-  size = 'md',
   isLoading = false,
   className = '',
   disabled,
   ...props
 }: PrimaryButtonProps) {
-  const baseStyles =
-    'inline-flex items-center justify-center font-bold rounded-md transition-all cursor-pointer shrink-0 disabled:opacity-60 disabled:cursor-not-allowed'
-
-  const sizeStyles = {
-    sm: 'px-3 py-1.5 text-xs gap-1.5',
-    md: 'px-5 py-2.5 text-xs gap-2',
-    lg: 'px-6 py-3 text-sm gap-2.5'
-  }
-
-  const variantStyles = {
-    primary: 'bg-[#135c4e] hover:bg-[#0e453b] text-white shadow-xs',
-    secondary: 'bg-neutral-100 hover:bg-neutral-200 text-neutral-800',
-    danger: 'bg-rose-600 hover:bg-rose-700 text-white shadow-xs',
-    outline: 'border border-neutral-200 hover:bg-neutral-50 text-neutral-700',
-    ghost: 'hover:bg-neutral-100 text-neutral-600'
-  }
+  const variantClass =
+    variant === 'primary'
+      ? 'btn-submit'
+      : variant === 'secondary' || variant === 'outline' || variant === 'ghost'
+      ? 'btn-neutral'
+      : variant === 'danger'
+      ? 'btn-delete'
+      : 'btn-submit'
 
   return (
     <button
       type="button"
       disabled={disabled || isLoading}
-      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      className={`btn ${variantClass} ${className}`}
       {...props}
     >
       {isLoading ? (
-        <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin shrink-0" />
       ) : (
         icon && <span className="shrink-0">{icon}</span>
       )}

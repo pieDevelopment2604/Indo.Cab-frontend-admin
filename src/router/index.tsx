@@ -66,14 +66,14 @@ export const router = createBrowserRouter([
             ],
           },
 
-          // Bookings
-          {
-            element: <ProtectedRoute permission="BOOKINGS_VIEW" />,
-            children: [
-              { path: ROUTES.BOOKINGS.substring(1), element: <PlaceholderPage path={ROUTES.BOOKINGS} /> },
-              { path: `${ROUTES.BOOKINGS.substring(1)}/:id`, element: <PlaceholderPage path={ROUTES.BOOKINGS} /> },
-            ],
-          },
+          // // Bookings
+          // {
+          //   element: <ProtectedRoute permission="BOOKINGS_VIEW" />,
+          //   children: [
+          //     { path: ROUTES.BOOKINGS.substring(1), element: <PlaceholderPage path={ROUTES.BOOKINGS} /> },
+          //     { path: `${ROUTES.BOOKINGS.substring(1)}/:id`, element: <PlaceholderPage path={ROUTES.BOOKINGS} /> },
+          //   ],
+          // },
 
           // Dispatch Control
           {

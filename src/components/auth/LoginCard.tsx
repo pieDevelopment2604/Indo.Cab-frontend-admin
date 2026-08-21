@@ -101,8 +101,8 @@ export default function LoginCard({ onSuccess }: LoginCardProps) {
       const userObj = response.user || {
         id: response.username || email,
         email: response.username || email,
-        name: response.name || 'User',
-        role: response.role || 'user'
+        name: response.name || "User",
+        role: response.role || "user",
       };
 
       dispatch(

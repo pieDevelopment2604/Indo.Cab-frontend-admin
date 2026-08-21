@@ -51,7 +51,7 @@ export default function Header({ sidebarCollapsed }: HeaderProps) {
         {/* Notification Bell */}
         <button
           type="button"
-          className="relative w-9 h-9 rounded-xl border border-gray-200 bg-white hover:bg-slate-50 flex items-center justify-center cursor-pointer text-slate-600 hover:text-gray-900 transition-colors shadow-2xs"
+          className="icon-btn icon-btn-secondary relative"
           title="Notifications"
         >
           <Bell size={16} strokeWidth={1.8} />
@@ -63,7 +63,7 @@ export default function Header({ sidebarCollapsed }: HeaderProps) {
         {/* Help Center Action */}
         <button
           type="button"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 hover:text-gray-900 transition-colors shadow-2xs cursor-pointer"
+          className="btn btn-neutral"
         >
           <HelpCircle size={15} className="text-slate-500" />
           <span>Help</span>

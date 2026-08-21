@@ -30,7 +30,7 @@ function ViewModeTabsComponent<T extends string = string>({
 }: ViewModeTabsProps<T>) {
   return (
     <div
-      className={`flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-2xl border border-neutral-200/80 shadow-xs w-full ${className}`}
+      className={`card p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full ${className}`}
     >
       {/* Left section: Search Input or Badge */}
       {onSearchChange !== undefined ? (
@@ -46,7 +46,7 @@ function ViewModeTabsComponent<T extends string = string>({
         </div>
       ) : badgeText ? (
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#135c4e] bg-teal-50 px-3 py-1 rounded-full border border-teal-100">
+          <span className="status-success">
             {badgeText}
           </span>
         </div>
@@ -63,11 +63,7 @@ function ViewModeTabsComponent<T extends string = string>({
               key={id}
               type="button"
               onClick={() => onTabChange(id)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                isActive
-                  ? 'bg-[#135c4e] text-white shadow-xs'
-                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-              }`}
+              className={`btn ${isActive ? 'btn-submit' : 'btn-neutral'}`}
             >
               {icon}
               <span>{label}</span>

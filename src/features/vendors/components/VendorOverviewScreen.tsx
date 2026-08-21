@@ -24,10 +24,12 @@ interface VendorOverviewScreenProps {
   canManageVendors: boolean
   onAddVendorClick: () => void
   onVendorDetailClick: (vendor: Vendor) => void
+  onEditVendorClick?: (vendor: Vendor) => void
   onSuspendToggle: (id: string) => void
   onDeleteVendor: (id: string) => void
   isLoading?: boolean
 }
+
 
 function VendorOverviewScreen({
   vendors,
@@ -39,7 +41,7 @@ function VendorOverviewScreen({
   canManageVendors,
   onAddVendorClick,
   onVendorDetailClick,
-  onSuspendToggle,
+  onEditVendorClick,
   onDeleteVendor,
   isLoading
 }: VendorOverviewScreenProps) {
@@ -182,27 +184,31 @@ function VendorOverviewScreen({
       align: 'right',
       cell: (vendor) => (
         <div className="flex items-center justify-end gap-2" onClick={(e) => e.stopPropagation()}>
-          <button
+          {/* <button
             onClick={() => onVendorDetailClick(vendor)}
             className="px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-semibold rounded-lg text-xs transition-colors cursor-pointer"
           >
             View Detail
-          </button>
+          </button> */}
           {canManageVendors && (
             <>
+              {onEditVendorClick && (
+                <button
+                  type="button"
+                  onClick={() => onEditVendorClick(vendor)}
+                  className="icon-btn icon-btn-edit"
+                  title="Edit Vendor"
+                >
+                  <Edit size={16} />
+                </button>
+              )}
               <button
-                onClick={() => onSuspendToggle(vendor.id)}
-                className="p-1.5 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg cursor-pointer"
-                title="Toggle Status"
-              >
-                <Edit size={14} />
-              </button>
-              <button
+                type="button"
                 onClick={() => onDeleteVendor(vendor.id)}
-                className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg cursor-pointer"
+                className="icon-btn icon-btn-delete"
                 title="Delete Vendor Partner"
               >
-                <Trash2 size={14} />
+                <Trash2 size={16} />
               </button>
             </>
           )}
@@ -226,7 +232,7 @@ function VendorOverviewScreen({
         </div>
 
         {canManageVendors && (
-          <AddButton label="Add Vendor" onClick={onAddVendorClick} />
+          <AddButton label="Add Vendor" onClick={onAddVendorClick} className='btn-submit' />
         )}
       </div>
 

@@ -1,69 +1,69 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { usePermission } from '@/hooks/usePermission'
-import { vendorApi } from '@/api'
-import type { Vendor } from './types'
-import { mapApiVendor } from './types'
-import VendorOverviewScreen from './components/VendorOverviewScreen'
-import VendorFormModal from './components/VendorFormModal'
-import VendorOnboardingWizard from './components/VendorOnboardingWizard'
+import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { usePermission } from "@/hooks/usePermission";
+import { vendorApi } from "@/api";
+import type { Vendor } from "./types";
+import { mapApiVendor } from "./types";
+import VendorOverviewScreen from "./components/VendorOverviewScreen";
+import VendorFormModal from "./components/VendorFormModal";
+import VendorOnboardingWizard from "./components/VendorOnboardingWizard";
+import { useVendorEditModal } from "./hooks/useVendorEditModal";
 
 /**
  * VendorManagementPage — rendered at /vendors
  * Shows the vendors list/overview. Navigates to /vendors/:id for detail drawer.
  */
 function VendorManagementPageComponent() {
-  const { hasPermission, isSuperAdmin } = usePermission()
-  const canManageVendors = isSuperAdmin || hasPermission('VENDORS_MANAGE')
-  const navigate = useNavigate()
+  const { hasPermission, isSuperAdmin } = usePermission();
+  const canManageVendors = isSuperAdmin || hasPermission("VENDORS_MANAGE");
+  const navigate = useNavigate();
 
-  const [vendors, setVendors] = useState<Vendor[]>([])
-  const [loading, setLoading] = useState(false)
-  const [showOnboarding, setShowOnboarding] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all')
+  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatusFilter, setSelectedStatusFilter] =
+    useState<string>("all");
 
-  // Modals state
-  const [editingVendor, setEditingVendor] = useState<Vendor | null>(null)
-
-  // Form State
-  const [formData, setFormData] = useState({
-    name: '',
-    companyName: '',
-    contactPerson: '',
-    email: '',
-    phone: '',
-    city: '',
-    fleetSize: 0,
-    commissionRate: 0
-  })
+  // Edit vendor modal hook
+  const {
+    editingVendor,
+    formData,
+    setFormData,
+    handleEditVendorClick,
+    closeEditModal,
+  } = useVendorEditModal();
 
   // Fetch real vendors data from backend API on mount
   useEffect(() => {
-    let isMounted = true
+    let isMounted = true;
     const fetchVendorsData = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const res = await vendorApi.getVendors()
-        const rawData: any[] = Array.isArray(res) ? res : (res as any).data || (res as any).vendors || []
+        const res = await vendorApi.getVendors();
+        const rawData: any[] = Array.isArray(res)
+          ? res
+          : (res as any).data || (res as any).vendors || [];
         if (isMounted && Array.isArray(rawData)) {
-          setVendors(rawData.map((item, idx) => mapApiVendor(item, idx)))
+          setVendors(rawData.map((item, idx) => mapApiVendor(item, idx)));
         }
       } catch {
-        console.warn('Backend vendor API fetch returned error')
-        if (isMounted) setVendors([])
+        console.warn("Backend vendor API fetch returned error");
+        if (isMounted) setVendors([]);
       } finally {
-        if (isMounted) setLoading(false)
+        if (isMounted) setLoading(false);
       }
-    }
+    };
 
-    fetchVendorsData()
-    return () => { isMounted = false }
-  }, [])
+    fetchVendorsData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Memoized filter vendors logic
   const filteredVendors = useMemo(() => {
-    const query = searchTerm.toLowerCase().trim()
+    const query = searchTerm.toLowerCase().trim();
     return vendors.filter((v) => {
       const matchesSearch =
         !query ||
@@ -72,76 +72,85 @@ function VendorManagementPageComponent() {
         v.contactPerson.toLowerCase().includes(query) ||
         v.email.toLowerCase().includes(query) ||
         v.city.toLowerCase().includes(query) ||
-        v.id.toLowerCase().includes(query)
+        v.id.toLowerCase().includes(query);
 
       const matchesStatus =
-        selectedStatusFilter === 'all' || v.status === selectedStatusFilter
+        selectedStatusFilter === "all" || v.status === selectedStatusFilter;
 
-      return matchesSearch && matchesStatus
-    })
-  }, [vendors, searchTerm, selectedStatusFilter])
+      return matchesSearch && matchesStatus;
+    });
+  }, [vendors, searchTerm, selectedStatusFilter]);
 
   // Handlers
-  const handleVendorAdded = useCallback((newVendor: Vendor) => {
-    setVendors((prev) => [newVendor, ...prev])
-    setShowOnboarding(false)
-    navigate(`/vendors/${newVendor.id}`)
-  }, [navigate])
+  const handleVendorAdded = useCallback(
+    (newVendor: Vendor) => {
+      setVendors((prev) => [newVendor, ...prev]);
+      setShowOnboarding(false);
+      navigate(`/vendors/${newVendor.id}`);
+    },
+    [navigate],
+  );
 
   const handleSuspendToggle = useCallback(
     async (id: string) => {
-      if (!canManageVendors) return
-      let targetStatus = 'suspended'
+      if (!canManageVendors) return;
+      let targetStatus = "suspended";
       setVendors((prev) =>
         prev.map((v) => {
           if (v.id === id) {
-            const nextStatus = v.status === 'suspended' ? 'active' : 'suspended'
-            targetStatus = nextStatus
-            return { ...v, status: nextStatus }
+            const nextStatus =
+              v.status === "suspended" ? "active" : "suspended";
+            targetStatus = nextStatus;
+            return { ...v, status: nextStatus };
           }
-          return v
-        })
-      )
+          return v;
+        }),
+      );
       try {
-        await vendorApi.toggleStatus(id, targetStatus)
+        await vendorApi.toggleStatus(id, targetStatus);
       } catch {
-        console.warn('SuspendToggle API call failed')
+        console.warn("SuspendToggle API call failed");
       }
     },
-    [canManageVendors]
-  )
+    [canManageVendors],
+  );
 
   const handleDeleteVendor = useCallback(
     async (id: string) => {
-      if (!canManageVendors) return
+      if (!canManageVendors) return;
       // TODO: Replace with an in-app confirmation modal
-      if (!window.confirm('Are you sure you want to delete this vendor partner?')) return
-      setVendors((prev) => prev.filter((v) => String(v.id) !== String(id)))
+      if (
+        !window.confirm("Are you sure you want to delete this vendor partner?")
+      )
+        return;
+      setVendors((prev) => prev.filter((v) => String(v.id) !== String(id)));
       try {
-        await vendorApi.deleteVendor(id)
+        await vendorApi.deleteVendor(id);
       } catch {
-        console.warn('Backend deleteVendor API call returned error')
+        console.warn("Backend deleteVendor API call returned error");
       }
     },
-    [canManageVendors]
-  )
+    [canManageVendors],
+  );
 
   const handleSaveVendor = useCallback(
     async (e: React.FormEvent) => {
-      e.preventDefault()
-      if (!canManageVendors || !editingVendor) return
+      e.preventDefault();
+      if (!canManageVendors || !editingVendor) return;
       setVendors((prev) =>
-        prev.map((v) => (v.id === editingVendor.id ? { ...v, ...formData } : v))
-      )
-      setEditingVendor(null)
+        prev.map((v) =>
+          v.id === editingVendor.id ? { ...v, ...formData } : v,
+        ),
+      );
+      closeEditModal();
       try {
-        await vendorApi.updateVendor(editingVendor.id, formData)
+        await vendorApi.updateVendor(editingVendor.id, formData);
       } catch {
-        console.warn('Backend updateVendor API call failed')
+        console.warn("Backend updateVendor API call failed");
       }
     },
-    [canManageVendors, editingVendor, formData]
-  )
+    [canManageVendors, editingVendor, formData, closeEditModal],
+  );
 
   if (!loading && showOnboarding) {
     return (
@@ -149,7 +158,7 @@ function VendorManagementPageComponent() {
         onBackToOverview={() => setShowOnboarding(false)}
         onVendorAdded={handleVendorAdded}
       />
-    )
+    );
   }
 
   return (
@@ -164,6 +173,7 @@ function VendorManagementPageComponent() {
         canManageVendors={canManageVendors}
         onAddVendorClick={() => setShowOnboarding(true)}
         onVendorDetailClick={(vendor) => navigate(`/vendors/${vendor.id}`)}
+        onEditVendorClick={handleEditVendorClick}
         onSuspendToggle={handleSuspendToggle}
         onDeleteVendor={handleDeleteVendor}
         isLoading={loading}
@@ -176,12 +186,12 @@ function VendorManagementPageComponent() {
           editingVendor={editingVendor}
           formData={formData}
           setFormData={setFormData}
-          onClose={() => setEditingVendor(null)}
+          onClose={closeEditModal}
           onSubmit={handleSaveVendor}
         />
       )}
     </div>
-  )
+  );
 }
 
-export default React.memo(VendorManagementPageComponent)
+export default React.memo(VendorManagementPageComponent);

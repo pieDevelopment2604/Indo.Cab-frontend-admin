@@ -156,7 +156,7 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
       {/* Grid: Best Vendors Rating Bar Graph + Live Vehicle Map */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         {/* Monthly Best Vendor Service Bar Graph Widget */}
-        <div className="xl:col-span-7 bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col justify-between gap-6">
+        <div className="xl:col-span-7 card p-5 flex flex-col justify-between gap-6">
           <div className="flex justify-between items-center border-b border-neutral-100 pb-4">
             <div>
               <div className="flex items-center gap-2">
@@ -231,7 +231,7 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
         </div>
 
         {/* Live Map of Vehicles Widget */}
-        <div className="xl:col-span-5 bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col gap-4 relative">
+        <div className="xl:col-span-5 card p-5 flex flex-col gap-4 relative">
           <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
             <div className="flex items-center gap-2">
               <Truck size={18} className="text-emerald-600" />
@@ -244,23 +244,23 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
 
           {/* React Leaflet Map */}
           <div className="w-full h-64 rounded-md overflow-hidden border border-neutral-200 relative z-0">
-            <MapContainer center={[23.0225, 72.5714]} zoom={11} className="w-full h-full" zoomControl={false}>
-              <TileLayer
-                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                attribution='&copy; <a href="https://carto.com/">Carto</a>'
-              />
-              {ACTIVE_VEHICLES.map((v) => (
-                <Marker key={v.id} position={[v.lat, v.lng]}>
-                  <Popup className="text-xs font-sans">
-                    <div className="font-bold mb-1">{v.id}</div>
-                    <div className="text-neutral-500">Type: {v.type}</div>
-                    <div className={`font-semibold mt-1 ${v.status === 'Active' ? 'text-emerald-600' : 'text-amber-600'}`}>
-                      {v.status}
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
-            </MapContainer>
+              <MapContainer center={[23.0225, 72.5714]} zoom={11} className="w-full h-full" zoomControl={false}>
+                <TileLayer
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                  attribution='&copy; <a href="https://carto.com/">Carto</a>'
+                />
+                {ACTIVE_VEHICLES.map((v) => (
+                  <Marker key={v.id} position={[v.lat, v.lng]}>
+                    <Popup className="text-xs font-sans">
+                      <div className="font-bold mb-1">{v.id}</div>
+                      <div className="text-neutral-500">Type: {v.type}</div>
+                      <div className={`font-semibold mt-1 ${v.status === 'Active' ? 'text-emerald-600' : 'text-amber-600'}`}>
+                        {v.status}
+                      </div>
+                    </Popup>
+                  </Marker>
+                ))}
+              </MapContainer>
             
             {/* Overlay Map Legend */}
             <div className="absolute bottom-2 left-2 right-2 bg-white/90 backdrop-blur-sm p-2 rounded-md border border-neutral-200 text-[10px] flex justify-between items-center shadow-sm z-[400] font-semibold text-neutral-700">
@@ -271,8 +271,9 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
           </div>
 
           <button
+            type="button"
             onClick={onNavigateToVendors}
-            className="w-full mt-auto py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-bold text-xs rounded-md transition-colors cursor-pointer text-center border border-neutral-200/50"
+            className="btn btn-neutral w-full mt-auto"
           >
             Manage Fleet Vehicles &amp; Vendors &rarr;
           </button>
@@ -282,7 +283,7 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
       {/* Grid: Recent Activity Feed + Administrative Tasks */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         {/* Left Column: Recent Activity Feed */}
-        <div className="xl:col-span-8 bg-white rounded-lg border border-neutral-200 shadow-sm overflow-hidden flex flex-col">
+        <div className="xl:col-span-8 card overflow-hidden flex flex-col">
           <div className="p-4 border-b border-neutral-100 flex justify-between items-center">
             <h3 className="text-sm font-bold text-neutral-900">Recent Operational Activity</h3>
             <button className="text-xs font-bold text-[#1B6B5C] hover:underline cursor-pointer">
@@ -305,13 +306,13 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
 
                   <div className="flex items-center gap-2 mt-1">
                     <span
-                      className={`text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${
+                      className={
                         item.tagType === 'warning'
-                          ? 'bg-amber-100 text-amber-800 border-amber-200'
+                          ? 'status-warning'
                           : item.tagType === 'success'
-                          ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
-                          : 'bg-red-100 text-red-800 border-red-200'
-                      } border`}
+                          ? 'status-success'
+                          : 'status-danger'
+                      }
                     >
                       {item.tag}
                     </span>
@@ -324,7 +325,7 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
         </div>
 
         {/* Right Column: Administrative Tasks */}
-        <div className="xl:col-span-4 bg-white p-5 rounded-lg border border-neutral-200 shadow-sm flex flex-col gap-4">
+        <div className="xl:col-span-4 card p-5 flex flex-col gap-4">
           <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
             Administrative Tasks
           </span>
@@ -333,8 +334,9 @@ function OverviewTabComponent({ onNavigateToVendors }: OverviewTabProps) {
             {adminTasks.map(({ id, label, icon: TaskIcon, onClick }) => (
               <button
                 key={id}
+                type="button"
                 onClick={onClick}
-                className="p-3 bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 rounded-md flex flex-col items-center justify-center gap-2 cursor-pointer transition-all shadow-xs"
+                className="btn btn-neutral p-3 flex flex-col items-center justify-center gap-2 min-h-[64px] normal-case"
               >
                 <TaskIcon size={18} className="text-neutral-700" />
                 <span className="text-[11px] font-semibold text-neutral-800">{label}</span>

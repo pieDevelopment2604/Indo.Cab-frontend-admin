@@ -177,7 +177,7 @@ export default function ClientOverviewScreen({
       align: "right",
       cell: (client) => (
         <div
-          className="flex items-center justify-end gap-2"
+          className="flex items-center justify-end"
           onClick={(e) => e.stopPropagation()}
         >
           {canManageClients && (
@@ -186,7 +186,7 @@ export default function ClientOverviewScreen({
                 <button
                   type="button"
                   onClick={() => onEditClientClick(client)}
-                  className="p-2 rounded-lg text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors cursor-pointer"
+                  className="icon-btn icon-btn-edit"
                   title="Edit Corporate Client"
                 >
                   <Edit size={16} />
@@ -195,13 +195,15 @@ export default function ClientOverviewScreen({
               <button
                 type="button"
                 onClick={() => onToggleBlacklist(client.id)}
-                className={`p-2 rounded-lg transition-colors cursor-pointer ${
-                  client.status === "suspended" || client.status === "blacklisted"
-                    ? "text-emerald-600 hover:bg-emerald-50"
-                    : "text-amber-500 hover:bg-amber-50"
+                className={` ${
+                  client.status === "suspended" ||
+                  client.status === "blacklisted"
+                    ? "icon-btn icon-btn-suspend"
+                    : "icon-btn icon-btn-active"
                 }`}
                 title={
-                  client.status === "suspended" || client.status === "blacklisted"
+                  client.status === "suspended" ||
+                  client.status === "blacklisted"
                     ? "Reactivate Client"
                     : "Suspend / Blacklist Client"
                 }
@@ -211,7 +213,7 @@ export default function ClientOverviewScreen({
               <button
                 type="button"
                 onClick={() => onDeleteClient(client.id)}
-                className="p-2 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
+                className="icon-btn icon-btn-delete"
                 title="Delete Corporate Account"
               >
                 <Trash2 size={16} />
@@ -228,7 +230,6 @@ export default function ClientOverviewScreen({
       {/* Header & Page Title with Reusable AddButton */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-
           <h1 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
             Manage Clients
           </h1>
@@ -239,7 +240,7 @@ export default function ClientOverviewScreen({
         </div>
 
         {canManageClients && (
-          <AddButton label="Add New Client" onClick={onAddClientClick} />
+          <AddButton label="Add New Client" onClick={onAddClientClick} className="btn-submit" />
         )}
       </div>
 
@@ -318,7 +319,7 @@ export default function ClientOverviewScreen({
           <button
             type="button"
             onClick={handleExportCsv}
-            className="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-bold text-[13px] rounded-md transition-all cursor-pointer flex items-center gap-2 shrink-0 shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-neutral-200/60"
+            className="btn btn-neutral"
           >
             Export CSV
           </button>

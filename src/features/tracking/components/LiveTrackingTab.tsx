@@ -1,21 +1,22 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
+import { Search, Filter, SlidersHorizontal, Crosshair } from "@/utils/icons";
 import {
-  Search,
-  Filter,
-  SlidersHorizontal,
-  Crosshair,
-} from "@/utils/icons";
-import { type ActiveTripDriver, SAMPLE_ACTIVE_DRIVERS } from '../types'
+  type ActiveTripDriver,
+  SAMPLE_ACTIVE_DRIVERS,
+} from "../../dashboard/types";
 
 // Fix leaflet icon issue in React
-delete (L.Icon.Default.prototype as any)._getIconUrl
+delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png'
-})
+  iconRetinaUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+});
 
 const defaultCenter = {
   lat: 28.6139,
@@ -23,7 +24,13 @@ const defaultCenter = {
 };
 
 // Component to handle map view updates
-function ChangeView({ center, zoom }: { center: {lat: number, lng: number}, zoom: number }) {
+function ChangeView({
+  center,
+  zoom,
+}: {
+  center: { lat: number; lng: number };
+  zoom: number;
+}) {
   const map = useMap();
   map.setView(center, zoom);
   return null;
@@ -56,7 +63,7 @@ function LiveTrackingTabComponent() {
   return (
     <div className="flex flex-col gap-4 -m-6 p-6 min-h-[calc(100vh-64px)] bg-neutral-50/50 text-neutral-900">
       {/* Header Search & Title Bar */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 rounded-lg bg-white border border-neutral-200 shadow-sm items-center">
+      <div className="card grid grid-cols-1 lg:grid-cols-12 gap-4 p-4 items-center">
         <div className="lg:col-span-7 relative lg:w-full sm:w-[480px] h-full">
           <Search
             size={16}
@@ -73,29 +80,34 @@ function LiveTrackingTabComponent() {
 
         {/* Filter & Sort controls */}
         <div className="lg:col-span-3 grid grid-cols-2 gap-2">
-          <button className="py-2 px-3 bg-white border border-neutral-200 text-neutral-700 rounded-md text-xs font-bold flex items-center justify-center gap-1 hover:bg-neutral-50 cursor-pointer shadow-sm">
+          <button
+            type="button"
+            className="btn btn-neutral"
+          >
             <Filter size={13} /> Filter
           </button>
-          <button className="py-2 px-3 bg-white border border-neutral-200 text-neutral-700 rounded-md text-xs font-bold flex items-center justify-center gap-1 hover:bg-neutral-50 cursor-pointer shadow-sm">
+          <button
+            type="button"
+            className="btn btn-neutral"
+          >
             <SlidersHorizontal size={13} /> Sort
           </button>
         </div>
 
         <div className="lg:col-span-2 flex justify-end items-center gap-4 text-xs font-semibold text-slate-300">
-          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-md font-bold whitespace-nowrap shadow-sm">
+          <span className="status-success">
             Live Tracking Active
           </span>
         </div>
       </div>
-      
+
       {/* Main Map & Sidebar Container */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[calc(100vh-160px)] min-h-[550px]">
         {/* left Sidebar: Active Trips */}
-
-        <div className="lg:col-span-4 bg-white border border-neutral-200 shadow-sm h-[100%] rounded-lg p-4 flex flex-col gap-4 overflow-y-auto">
+        <div className="lg:col-span-4 card h-[100%] p-4 flex flex-col gap-4 overflow-y-auto">
           <div className="flex justify-between items-center pb-2 border-b border-neutral-100">
             <h3 className="text-sm font-bold text-neutral-900">Active Trips</h3>
-            <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2 py-0.5 rounded-md border border-emerald-200">
+            <span className="status-success">
               {activeDrivers.length} Total
             </span>
           </div>
@@ -133,11 +145,11 @@ function LiveTrackingTabComponent() {
                     </div>
 
                     <span
-                      className={`px-2 py-1 rounded-md text-[10px] font-bold capitalize border ${
+                      className={
                         driver.statusType === "warning"
-                          ? "bg-amber-50 text-amber-700 border-amber-200"
-                          : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                      }`}
+                          ? "status-warning"
+                          : "status-success"
+                      }
                     >
                       {driver.status}
                     </span>
@@ -175,7 +187,7 @@ function LiveTrackingTabComponent() {
                       </span>
                       <div className="w-full h-1.5 bg-neutral-200 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full ${driver.statusType === 'warning' ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                          className={`h-full rounded-full ${driver.statusType === "warning" ? "bg-amber-500" : "bg-emerald-500"}`}
                           style={{ width: `${driver.progressPercent}%` }}
                         />
                       </div>
@@ -189,23 +201,32 @@ function LiveTrackingTabComponent() {
 
         {/* right/Center Map Display */}
         <div className="lg:col-span-8 relative bg-neutral-100 rounded-lg border border-neutral-200 overflow-hidden shadow-sm flex items-center justify-center select-none z-0">
-          <MapContainer 
-            center={selectedDriver ? { lat: selectedDriver.lat, lng: selectedDriver.lng } : defaultCenter} 
-            zoom={13} 
+          <MapContainer
+            center={
+              selectedDriver
+                ? { lat: selectedDriver.lat, lng: selectedDriver.lng }
+                : defaultCenter
+            }
+            zoom={13}
             className="w-full h-full"
           >
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://carto.com/">Carto</a>'
             />
-            {selectedDriver && <ChangeView center={{lat: selectedDriver.lat, lng: selectedDriver.lng}} zoom={14} />}
-            
+            {selectedDriver && (
+              <ChangeView
+                center={{ lat: selectedDriver.lat, lng: selectedDriver.lng }}
+                zoom={14}
+              />
+            )}
+
             {activeDrivers.map((driver) => (
               <Marker
                 key={driver.id}
                 position={{ lat: driver.lat, lng: driver.lng }}
                 eventHandlers={{
-                  click: () => handleSelectDriver(driver)
+                  click: () => handleSelectDriver(driver),
                 }}
               >
                 <Popup className="font-sans">
@@ -217,11 +238,15 @@ function LiveTrackingTabComponent() {
                       ID: {driver.tripId}
                     </div>
                     <div className="text-[11px]">
-                      <span className="font-bold text-slate-700">Distance:</span>{" "}
+                      <span className="font-bold text-slate-700">
+                        Distance:
+                      </span>{" "}
                       {driver.distance || "N/A"}
                     </div>
                     <div className="text-[11px]">
-                      <span className="font-bold text-slate-700">Duration:</span>{" "}
+                      <span className="font-bold text-slate-700">
+                        Duration:
+                      </span>{" "}
                       {driver.duration || "N/A"}
                     </div>
                     <div className="text-[11px] mt-1 border-t pt-1 border-slate-200">
@@ -245,12 +270,14 @@ function LiveTrackingTabComponent() {
           {/* Map Controls */}
           <div className="absolute bottom-6 right-6 flex flex-col gap-2 z-[400]">
             <button
+              type="button"
               onClick={() => {
                 if (selectedDriver) {
-                     setSelectedDriver({...selectedDriver})
+                  setSelectedDriver({ ...selectedDriver });
                 }
               }}
-              className="w-9 h-9 bg-white hover:bg-neutral-50 text-neutral-700 border border-neutral-200 rounded-md flex items-center justify-center shadow-sm cursor-pointer"
+              className="icon-btn icon-btn-secondary"
+              title="Recenter Map"
             >
               <Crosshair size={18} />
             </button>

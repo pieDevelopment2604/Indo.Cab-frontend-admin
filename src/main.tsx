@@ -7,7 +7,7 @@ import { queryClient } from './lib/queryClient'
 import './index.css'
 import 'leaflet/dist/leaflet.css'
 import App from './App.tsx'
-import RecaptchaProvider from './providers/RecaptchaProvider.tsx'
+import RecaptchaProvider from './Providers/RecaptchaProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

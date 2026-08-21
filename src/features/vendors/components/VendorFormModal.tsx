@@ -2,29 +2,13 @@ import React from 'react'
 import type { Vendor } from '../types'
 import { X } from '@/utils/icons'
 
+import type { VendorFormData } from '../hooks/useVendorEditModal'
+
 interface VendorFormModalProps {
   isOpen: boolean
   editingVendor: Vendor | null
-  formData: {
-    name: string
-    companyName: string
-    contactPerson: string
-    email: string
-    phone: string
-    city: string
-    fleetSize: number
-    commissionRate: number
-  }
-  setFormData: React.Dispatch<React.SetStateAction<{
-    name: string
-    companyName: string
-    contactPerson: string
-    email: string
-    phone: string
-    city: string
-    fleetSize: number
-    commissionRate: number
-  }>>
+  formData: VendorFormData
+  setFormData: React.Dispatch<React.SetStateAction<VendorFormData>>
   onClose: () => void
   onSubmit: (e: React.FormEvent) => void
 }
@@ -41,14 +25,16 @@ export default function VendorFormModal({
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-neutral-200 flex flex-col gap-5">
+      <div className="card max-w-lg w-full p-6 shadow-2xl flex flex-col gap-5">
         <div className="flex justify-between items-center border-b border-neutral-100 pb-3">
           <h3 className="text-lg font-bold text-neutral-900">
             {editingVendor ? `Edit Vendor (${editingVendor.id})` : 'Add New Partner Vendor'}
           </h3>
           <button
+            type="button"
             onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-600 cursor-pointer p-1 rounded-lg"
+            className="icon-btn icon-btn-sm text-neutral-400 hover:text-neutral-600"
+            title="Close Modal"
           >
             <X size={18} />
           </button>
@@ -67,7 +53,7 @@ export default function VendorFormModal({
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
-
+{/* 
             <div className="flex flex-col gap-1">
               <label className="text-[12px] font-semibold text-neutral-700">Registered Company Name</label>
               <input
@@ -78,7 +64,7 @@ export default function VendorFormModal({
                 value={formData.companyName}
                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
               />
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-1">
               <label className="text-[12px] font-semibold text-neutral-700">Contact Person Name</label>
@@ -163,13 +149,13 @@ export default function VendorFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-600 hover:bg-neutral-100 transition-colors cursor-pointer"
+              className="btn btn-neutral"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-[#0D5C4D] hover:bg-[#094237] text-white transition-colors cursor-pointer"
+              className="btn btn-submit"
             >
               {editingVendor ? 'Save Changes' : 'Create Vendor'}
             </button>

@@ -31,7 +31,18 @@ const processQueue = (error: any, token: string | null = null) => {
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = store.getState().auth.token;
+    let token = store.getState().auth.token;
+    if (!token) {
+      try {
+        const stored = localStorage.getItem("indocab-auth-storage");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          token = parsed?.token || parsed?.state?.token || null;
+        }
+      } catch {
+        // ignore
+      }
+    }
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }

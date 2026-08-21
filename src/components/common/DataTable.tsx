@@ -1,5 +1,6 @@
 import React from 'react'
 import { ChevronLeft, ChevronRight, Search } from '@/utils/icons'
+import StatusBadge from './StatusBadge'
 
 export interface Column<T> {
   header: string
@@ -64,7 +65,7 @@ export default function DataTable<T>({
   const hasToolbar = onSearchChange !== undefined || (filterOptions && filterOptions.length > 0) || actionButtons !== undefined
 
   return (
-    <div className="bg-white rounded-lg border border-neutral-200/70 shadow-sm overflow-hidden flex flex-col flex-1 min-h-[400px]">
+    <div className="card overflow-hidden flex flex-col flex-1 min-h-[400px]">
       {/* Integrated Search, Filter Options & Actions Toolbar */}
       {hasToolbar && (
         <div className="px-5 py-3.5 border-b border-neutral-100 bg-white flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
@@ -198,7 +199,15 @@ export default function DataTable<T>({
                         col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
                       }`}
                     >
-                      {col.cell ? col.cell(row) : col.accessorKey ? String(row[col.accessorKey] ?? '') : null}
+                      {col.cell ? (
+                        col.cell(row)
+                      ) : col.accessorKey ? (
+                        col.accessorKey === 'status' && typeof row[col.accessorKey] === 'string' ? (
+                          <StatusBadge status={String(row[col.accessorKey])} />
+                        ) : (
+                          String(row[col.accessorKey] ?? '')
+                        )
+                      ) : null}
                     </td>
                   ))}
                 </tr>
@@ -222,7 +231,8 @@ export default function DataTable<T>({
               type="button"
               disabled={pagination.currentPage === 1}
               onClick={() => pagination.onPageChange(pagination.currentPage - 1)}
-              className="p-1.5 rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer transition-colors"
+              className="icon-btn icon-btn-secondary icon-btn-sm"
+              title="Previous Page"
             >
               <ChevronLeft size={16} />
             </button>
@@ -235,7 +245,8 @@ export default function DataTable<T>({
               type="button"
               disabled={pagination.currentPage === pagination.totalPages}
               onClick={() => pagination.onPageChange(pagination.currentPage + 1)}
-              className="p-1.5 rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer transition-colors"
+              className="icon-btn icon-btn-secondary icon-btn-sm"
+              title="Next Page"
             >
               <ChevronRight size={16} />
             </button>

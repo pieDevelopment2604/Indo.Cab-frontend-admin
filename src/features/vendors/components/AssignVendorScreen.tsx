@@ -28,13 +28,16 @@ export default function AssignVendorScreen({ onBackToOverview }: AssignVendorScr
           </p>
         </div>
 
-        <button className="px-4 py-2 border border-neutral-200 bg-white hover:bg-neutral-50 text-neutral-700 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center gap-2">
+        <button
+          type="button"
+          className="btn btn-neutral"
+        >
           Filter by Fleet Size
         </button>
       </div>
 
       {/* Booking Route Summary Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4">
+      <div className="card p-5 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-8 text-xs">
           <div>
             <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">ROUTE</span>
@@ -61,7 +64,7 @@ export default function AssignVendorScreen({ onBackToOverview }: AssignVendorScr
       {/* Vendor Cards Grid (2x2 Grid with AI Recommendation Badge) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Card 1 */}
-        <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs flex flex-col justify-between gap-5 relative">
+        <div className="card p-6 flex flex-col justify-between gap-5 relative">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-teal-600 text-white font-extrabold text-lg flex items-center justify-center">
@@ -95,13 +98,16 @@ export default function AssignVendorScreen({ onBackToOverview }: AssignVendorScr
             </div>
           </div>
 
-          <button className="w-full py-3 bg-[#0D5C4D] hover:bg-[#094237] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <button
+            type="button"
+            className="btn btn-submit w-full py-3"
+          >
             One-tap Assign ⚡
           </button>
         </div>
 
         {/* Card 2: AI RECOMMENDATION BADGE */}
-        <div className="bg-white p-6 rounded-2xl border-2 border-[#1B6B5C] shadow-md flex flex-col justify-between gap-5 relative">
+        <div className="card p-6 border-2 border-[#1B6B5C] shadow-md flex flex-col justify-between gap-5 relative">
           {/* AI Recommendation Tag */}
           <div className="absolute -top-3 right-6 bg-[#8E4E3E] text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
             <Sparkles size={12} /> AI RECOMMENDATION
@@ -140,13 +146,16 @@ export default function AssignVendorScreen({ onBackToOverview }: AssignVendorScr
             </div>
           </div>
 
-          <button className="w-full py-3 bg-[#0D5C4D] hover:bg-[#094237] text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <button
+            type="button"
+            className="btn btn-submit w-full py-3"
+          >
             One-tap Assign ⚡
           </button>
         </div>
 
         {/* Card 3 */}
-        <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs flex flex-col justify-between gap-5">
+        <div className="card p-6 flex flex-col justify-between gap-5">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-slate-700 text-white font-extrabold text-lg flex items-center justify-center">
@@ -180,13 +189,16 @@ export default function AssignVendorScreen({ onBackToOverview }: AssignVendorScr
             </div>
           </div>
 
-          <button className="w-full py-3 bg-[#0D5C4D] hover:bg-[#094237] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <button
+            type="button"
+            className="btn btn-submit w-full py-3"
+          >
             One-tap Assign ⚡
           </button>
         </div>
 
         {/* Card 4 */}
-        <div className="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-xs flex flex-col justify-between gap-5">
+        <div className="card p-6 flex flex-col justify-between gap-5">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-amber-600 text-white font-extrabold text-lg flex items-center justify-center">
@@ -220,7 +232,10 @@ export default function AssignVendorScreen({ onBackToOverview }: AssignVendorScr
             </div>
           </div>
 
-          <button className="w-full py-3 bg-[#0D5C4D] hover:bg-[#094237] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <button
+            type="button"
+            className="btn btn-submit w-full py-3"
+          >
             One-tap Assign ⚡
           </button>
         </div>
@@ -228,7 +243,10 @@ export default function AssignVendorScreen({ onBackToOverview }: AssignVendorScr
 
       {/* Load More Button */}
       <div className="flex justify-center mt-2">
-        <button className="px-6 py-2.5 border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-800 font-bold text-xs rounded-full shadow-xs transition-all cursor-pointer">
+        <button
+          type="button"
+          className="btn btn-neutral rounded-full"
+        >
           Load More Nearby Vendors
         </button>
       </div>
