@@ -7,6 +7,7 @@ import ClientManagementPage from '@/features/clients/ClientManagementPage'
 import ClientDetailPage from '@/features/clients/ClientDetailPage'
 import VendorManagementPage from '@/features/vendors/VendorManagementPage'
 import VendorDetailPage from '@/features/vendors/VendorDetailPage'
+import DriverManagementPage from '@/features/drivers/DriverManagementPage'
 import DispatchPage from '@/features/dispatch/DispatchPage'
 import TrackingPage from '@/features/tracking/TrackingPage'
 import { ROUTES, ROUTE_TITLES } from '@/constants/routes'
@@ -59,8 +60,8 @@ export const router = createBrowserRouter([
           {
             element: <ProtectedRoute permission="FLEET_VIEW" />,
             children: [
-              { path: ROUTES.DRIVERS.substring(1), element: <PlaceholderPage path={ROUTES.DRIVERS} /> },
-              { path: `${ROUTES.DRIVERS.substring(1)}/:id`, element: <PlaceholderPage path={ROUTES.DRIVERS} /> },
+              { path: ROUTES.DRIVERS.substring(1), element: <DriverManagementPage /> },
+              { path: `${ROUTES.DRIVERS.substring(1)}/:id`, element: <DriverManagementPage /> },
               { path: ROUTES.VEHICLES.substring(1), element: <PlaceholderPage path={ROUTES.VEHICLES} /> },
               { path: `${ROUTES.VEHICLES.substring(1)}/:id`, element: <PlaceholderPage path={ROUTES.VEHICLES} /> },
             ],

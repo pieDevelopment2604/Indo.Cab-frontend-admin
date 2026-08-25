@@ -86,6 +86,7 @@ export {
   FileCheck,
   CheckCircle2,
   UploadCloud,
-  Shield
+  Shield,
+  UserPlus
 } from "lucide-react";
 

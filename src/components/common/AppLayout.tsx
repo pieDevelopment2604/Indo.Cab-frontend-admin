@@ -29,7 +29,7 @@ export default function AppLayout() {
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh',
-          transition: 'margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+          transition: 'margin-left 0.26s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
         <Header sidebarCollapsed={collapsed} onToggleSidebar={() => setCollapsed((c) => !c)} />

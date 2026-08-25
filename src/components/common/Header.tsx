@@ -21,9 +21,10 @@ export default function Header({ sidebarCollapsed }: HeaderProps) {
 
   return (
     <header
-      className="fixed top-0 right-0 h-[58px] bg-white border-b border-gray-200 grid grid-cols-[1fr_auto_1fr] items-center px-5 gap-4 z-30 transition-[left] duration-200 ease-in-out"
+      className="fixed top-0 right-0 h-[58px] bg-white border-b border-gray-200 grid grid-cols-[1fr_auto_1fr] items-center px-5 gap-4 z-30"
       style={{
-        left: sidebarCollapsed ? 64 : 256
+        left: sidebarCollapsed ? 64 : 256,
+        transition: 'left 0.26s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
       {/* Left Section: Page Title */}

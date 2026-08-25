@@ -16,7 +16,10 @@ import {
   UploadCloud,
   CheckCircle2,
   Trash2,
-  MapPin
+  MapPin,
+  Lock,
+  Eye,
+  EyeOff
 } from '@/utils/icons'
 
 interface VendorOnboardingWizardProps {
@@ -96,13 +99,15 @@ export default function VendorOnboardingWizard({
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [cityInput, setCityInput] = useState('')
-  const [step1Errors, setStep1Errors] = useState<{ gst?: string; pan?: string }>({})
+  const [step1Errors, setStep1Errors] = useState<{ gst?: string; pan?: string; password?: string }>({})
 
   // Form State
   const [name, setName] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [contactPerson, setContactPerson] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [phone, setPhone] = useState('')
   const [gstNumber, setGstNumber] = useState('')
   const [panNumber, setPanNumber] = useState('')
@@ -236,6 +241,10 @@ export default function VendorOnboardingWizard({
   // Form Step Handlers
   const handleNextToStep2 = (e: React.FormEvent) => {
     e.preventDefault()
+    if (password && password.length < 6) {
+      setStep1Errors((prev) => ({ ...prev, password: 'Password must be at least 6 characters.' }))
+      return
+    }
     if (gstNumber) {
       const gValid = validateGst(gstNumber, panNumber)
       if (!gValid.isValid) {
@@ -274,6 +283,7 @@ export default function VendorOnboardingWizard({
 
     const apiPayload = {
       email,
+      password: password || undefined,
       mobile_number: phone,
       first_name: firstName,
       last_name: lastName,
@@ -294,6 +304,7 @@ export default function VendorOnboardingWizard({
       firstName,
       lastName,
       email,
+      password: password || undefined,
       phone,
       city: city || operatingCities[0] || '',
       fleetSize: fleetSize || 1,
@@ -583,16 +594,58 @@ export default function VendorOnboardingWizard({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-bold text-neutral-700">Official Business Email *</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="budi@indocabfleet.com"
-                  className="px-3.5 py-2.5 text-sm border border-neutral-200 rounded-xl outline-none focus:border-[#0D5C4D] transition-colors"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-neutral-700">Official Business Email *</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="budi@indocabfleet.com"
+                    className="px-3.5 py-2.5 text-sm border border-neutral-200 rounded-xl outline-none focus:border-[#0D5C4D] transition-colors"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-bold text-neutral-700 flex items-center gap-1">
+                      <Lock size={13} className="text-[#0D5C4D]" />
+                      <span>Vendor Portal Password *</span>
+                    </label>
+                    <span className="text-[10px] text-neutral-400 font-medium">Min 6 characters</span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      placeholder="Enter login password"
+                      className={`w-full px-3.5 py-2.5 pr-10 text-sm border rounded-xl outline-none transition-colors ${
+                        step1Errors.password
+                          ? 'border-rose-400 bg-rose-50/30 focus:border-rose-500'
+                          : 'border-neutral-200 focus:border-[#0D5C4D]'
+                      }`}
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value)
+                        if (step1Errors.password) setStep1Errors((prev) => ({ ...prev, password: undefined }))
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 transition-colors cursor-pointer"
+                      title={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  {step1Errors.password && (
+                    <span className="text-[10px] font-semibold text-rose-500 flex items-center gap-1">
+                      <AlertCircle size={12} /> {step1Errors.password}
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* GST & PAN Tax Credentials */}

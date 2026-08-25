@@ -64,7 +64,13 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
       if (!items.length) return null
       return (
         <div key={key} className="sidebar-group">
-          {!collapsed && label && <span className="sidebar-group-label">{label}</span>}
+          {label && (
+            <span
+              className={`sidebar-group-label ${collapsed ? 'collapsed' : ''}`}
+            >
+              {label}
+            </span>
+          )}
           {items.map((item) => {
             const isActive =
               item.to === '/'
@@ -77,10 +83,14 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
                 to={item.to}
                 end={item.to === '/'}
                 title={collapsed ? item.label : undefined}
-                className={`sidebar-item ${isActive ? 'active' : ''} ${collapsed ? 'collapsed' : ''}`}
+                className={`sidebar-item ${isActive ? 'active' : ''}`}
               >
-                <Icon size={17} className="sidebar-item-icon" strokeWidth={isActive ? 2.2 : 1.8} />
-                {!collapsed && <span className="sidebar-item-label">{item.label}</span>}
+                <div className="sidebar-item-icon-box">
+                  <Icon size={17} className="sidebar-item-icon" strokeWidth={isActive ? 2.2 : 1.8} />
+                </div>
+                <span className={`sidebar-item-label ${collapsed ? 'collapsed' : ''}`}>
+                  {item.label}
+                </span>
               </NavLink>
             )
           })}
@@ -93,6 +103,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
     if (!collapsed) return
     const target = e.target as HTMLElement
     if (
+      target.closest('.sidebar-logo') ||
       target.closest('.sidebar-item') ||
       target.closest('[data-profile-section]')
     ) {
@@ -107,19 +118,21 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
       onClick={handleSidebarClick}
       style={{
         width: collapsed ? 64 : 256,
-        transition: 'width 0.22s cubic-bezier(0.4, 0, 0.2, 1)'
       }}
     >
       {/* Sidebar Top Header */}
-      <div className="sidebar-logo flex items-center justify-between px-3">
-        <div className="flex items-center gap-2.5 min-w-0">
+      <div className="sidebar-logo flex items-center justify-between">
+        <div className="flex items-center min-w-0 flex-1">
           <button
             type="button"
-            onClick={collapsed ? onToggle : undefined}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (collapsed) onToggle()
+            }}
             onMouseEnter={() => collapsed && setIsLogoHovered(true)}
             onMouseLeave={() => setIsLogoHovered(false)}
-            className={`sidebar-logo-mark shrink-0 transition-all duration-200 border-0 p-0 flex items-center justify-center ${
-              collapsed ? 'cursor-pointer' : 'cursor-default'
+            className={`sidebar-logo-mark shrink-0 border-0 p-0 flex items-center justify-center ${
+              collapsed ? 'cursor-pointer hover:opacity-90 active:scale-95' : 'cursor-default'
             }`}
             title={collapsed ? 'Expand sidebar' : undefined}
           >
@@ -130,24 +143,35 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
             )}
           </button>
 
-          {!collapsed && (
-            <div className="sidebar-logo-text leading-tight">
-              <span className="sidebar-logo-title">Indo Cab</span>
-              <span className="sidebar-logo-sub">Super Admin</span>
-            </div>
-          )}
+          <div
+            className="sidebar-logo-text leading-tight ml-2.5 transition-all duration-200"
+            style={{
+              opacity: collapsed ? 0 : 1,
+              maxWidth: collapsed ? 0 : 160,
+              pointerEvents: collapsed ? 'none' : 'auto',
+            }}
+          >
+            <span className="sidebar-logo-title">Indo Cab</span>
+            <span className="sidebar-logo-sub">Super Admin</span>
+          </div>
         </div>
 
-        {!collapsed && (
-          <button
-            type="button"
-            onClick={onToggle}
-            className="p-1.5 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer shrink-0"
-            title="Collapse sidebar"
-          >
-            <PanelLeft size={18} strokeWidth={1.8} />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onToggle()
+          }}
+          className="p-1.5 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-900 transition-all duration-150 cursor-pointer shrink-0"
+          style={{
+            opacity: collapsed ? 0 : 1,
+            pointerEvents: collapsed ? 'none' : 'auto',
+            transform: collapsed ? 'scale(0.8)' : 'scale(1)',
+          }}
+          title="Collapse sidebar"
+        >
+          <PanelLeft size={18} strokeWidth={1.8} />
+        </button>
       </div>
 
       {/* Navigation Items */}
@@ -214,9 +238,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
         {/* Profile Card Button */}
         <button
           onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-          className={`w-full p-2 rounded-lg border transition-all cursor-pointer flex items-center text-left group ${
-            collapsed ? 'justify-center ' : 'justify-between '
-          } ${
+          className={`w-full h-11 p-1.5 rounded-lg border transition-all cursor-pointer flex items-center group justify-between ${
             isProfileMenuOpen
               ? 'bg-neutral-100 border-neutral-300'
               : 'bg-neutral-50/80 hover:bg-neutral-100 border-neutral-200/80'
@@ -227,21 +249,32 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
             <div className="w-8 h-8 rounded-lg bg-[#0D5C4D] text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-2xs">
               SA
             </div>
-            <div className={`flex flex-col leading-tight overflow-hidden transition-all duration-300 ${collapsed ? 'max-w-0 opacity-0 ml-0' : 'max-w-[150px] opacity-100 ml-2.5'}`}>
+            <div
+              className="flex flex-col leading-tight overflow-hidden transition-all duration-200 text-left"
+              style={{
+                maxWidth: collapsed ? 0 : 130,
+                opacity: collapsed ? 0 : 1,
+                marginLeft: collapsed ? 0 : 8,
+              }}
+            >
               <span className="font-bold text-xs text-neutral-900 group-hover:text-[#1B6B5C] transition-colors truncate whitespace-nowrap">
                 Admin Profile
               </span>
               <span className="text-[10px] font-semibold text-neutral-400 truncate whitespace-nowrap">
-                Manage organization
+                Manage org
               </span>
             </div>
           </div>
 
           <ChevronUp
             size={12}
-            className={`text-neutral-400 group-hover:text-neutral-600 shrink-0 transition-all duration-300 ${
-              isProfileMenuOpen ? 'rotate-180' : '' 
-            } ${collapsed ? 'w-0 opacity-0 overflow-hidden' : 'w-3 opacity-100'}`}
+            className={`text-neutral-400 group-hover:text-neutral-600 shrink-0 transition-all duration-200 ${
+              isProfileMenuOpen ? 'rotate-180' : ''
+            }`}
+            style={{
+              opacity: collapsed ? 0 : 1,
+              width: collapsed ? 0 : 12,
+            }}
           />
         </button>
       </div>

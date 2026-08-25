@@ -11,6 +11,7 @@ export interface ApiVendor {
   name?: string;
   contact_person?: string;
   email?: string;
+  password?: string;
   mobile_number?: string;
   phone?: string;
   address?: string;
@@ -45,6 +46,7 @@ export interface Vendor {
   companyName: string;
   contactPerson: string;
   email: string;
+  password?: string;
   phone: string;
   city: string;
   fleetSize: number;
