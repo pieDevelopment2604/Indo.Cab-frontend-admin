@@ -87,6 +87,7 @@ export {
   CheckCircle2,
   UploadCloud,
   Shield,
-  UserPlus
+  UserPlus,
+  Minus
 } from "lucide-react";
 

@@ -1,120 +1,139 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import { LogOut, User, Settings, ChevronUp, PanelLeft, HelpCircle } from '@/utils/icons'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { clearAuth } from '@/store/authSlice'
-import { NAV_ITEMS, NAV_GROUPS } from '@/constants/navigation'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import {
+  LogOut,
+  User,
+  Settings,
+  ChevronUp,
+  PanelLeft,
+  HelpCircle,
+} from "@/utils/icons";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearAuth } from "@/store/authSlice";
+import { NAV_ITEMS, NAV_GROUPS } from "@/constants/navigation";
 
 interface SidebarProps {
-  collapsed: boolean
-  onToggle: () => void
+  collapsed: boolean;
+  onToggle: () => void;
 }
 
 const PROFILE_MENU_ITEMS = [
-  { label: 'Profile Settings', icon: User, path: '/profile' },
-  { label: 'Organization Settings', icon: Settings, path: '/settings' },
-  { label: 'Support & Help', icon: HelpCircle, path: '/support' },
-]
+  { label: "Profile Settings", icon: User, path: "/profile" },
+  { label: "Organization Settings", icon: Settings, path: "/settings" },
+  { label: "Support & Help", icon: HelpCircle, path: "/support" },
+];
 
 function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [isLogoHovered, setIsLogoHovered] = useState(false)
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const [isLogoHovered, setIsLogoHovered] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = useCallback(() => {
-    setIsProfileMenuOpen(false)
-    dispatch(clearAuth())
-    navigate('/login')
-  }, [dispatch, navigate])
+    setIsProfileMenuOpen(false);
+    dispatch(clearAuth());
+    navigate("/login");
+  }, [dispatch, navigate]);
 
   const handleAction = useCallback(
     (path?: string) => {
-      setIsProfileMenuOpen(false)
+      setIsProfileMenuOpen(false);
       if (path) {
-        navigate(path)
+        navigate(path);
       }
     },
-    [navigate]
-  )
+    [navigate],
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsProfileMenuOpen(false)
+        setIsProfileMenuOpen(false);
       }
-    }
+    };
 
     if (isProfileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isProfileMenuOpen])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileMenuOpen]);
 
   // Memoize nav groups to prevent redundant iterations
   const navGroupsRender = useMemo(() => {
     return NAV_GROUPS.map(({ key, label }) => {
-      const items = NAV_ITEMS.filter((n) => n.group === key)
-      if (!items.length) return null
+      const items = NAV_ITEMS.filter((n) => n.group === key);
+      if (!items.length) return null;
       return (
         <div key={key} className="sidebar-group">
           {label && (
             <span
-              className={`sidebar-group-label ${collapsed ? 'collapsed' : ''}`}
+              className={`sidebar-group-label ${collapsed ? "collapsed" : ""}`}
             >
               {label}
             </span>
           )}
           {items.map((item) => {
             const isActive =
-              item.to === '/'
-                ? location.pathname === '/'
-                : location.pathname.startsWith(item.to)
-            const Icon = item.icon
+              item.to === "/"
+                ? location.pathname === "/"
+                : location.pathname.startsWith(item.to);
+            const Icon = item.icon;
             return (
               <NavLink
                 key={item.to}
                 to={item.to}
-                end={item.to === '/'}
+                end={item.to === "/"}
                 title={collapsed ? item.label : undefined}
-                className={`sidebar-item ${isActive ? 'active' : ''}`}
+                className={`sidebar-item ${isActive ? "active" : ""}`}
               >
                 <div className="sidebar-item-icon-box">
-                  <Icon size={17} className="sidebar-item-icon" strokeWidth={isActive ? 2.2 : 1.8} />
+                  <Icon
+                    size={17}
+                    className="sidebar-item-icon"
+                    strokeWidth={isActive ? 2.2 : 1.8}
+                  />
                 </div>
-                <span className={`sidebar-item-label ${collapsed ? 'collapsed' : ''}`}>
+                <span
+                  className={`sidebar-item-label ${collapsed ? "collapsed" : ""}`}
+                >
                   {item.label}
                 </span>
               </NavLink>
-            )
+            );
           })}
         </div>
-      )
-    })
-  }, [collapsed, location.pathname])
+      );
+    });
+  }, [collapsed, location.pathname]);
 
   const handleSidebarClick = (e: React.MouseEvent) => {
-    if (!collapsed) return
-    const target = e.target as HTMLElement
+    if (!collapsed) return;
+    const target = e.target as HTMLElement;
     if (
-      target.closest('.sidebar-logo') ||
-      target.closest('.sidebar-item') ||
-      target.closest('[data-profile-section]')
+      target.closest(".sidebar-logo") ||
+      target.closest(".sidebar-item") ||
+      target.closest("[data-profile-section]")
     ) {
-      return
+      return;
     }
-    onToggle()
-  }
+    onToggle();
+  };
 
   return (
     <aside
-      className={`sidebar ${collapsed ? 'cursor-pointer' : ''}`}
+      className={`sidebar hidden lg:flex ${collapsed ? "cursor-pointer" : ""}`}
       onClick={handleSidebarClick}
       style={{
         width: collapsed ? 64 : 256,
@@ -126,15 +145,17 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
           <button
             type="button"
             onClick={(e) => {
-              e.stopPropagation()
-              if (collapsed) onToggle()
+              e.stopPropagation();
+              if (collapsed) onToggle();
             }}
             onMouseEnter={() => collapsed && setIsLogoHovered(true)}
             onMouseLeave={() => setIsLogoHovered(false)}
             className={`sidebar-logo-mark shrink-0 border-0 p-0 flex items-center justify-center ${
-              collapsed ? 'cursor-pointer hover:opacity-90 active:scale-95' : 'cursor-default'
+              collapsed
+                ? "cursor-pointer hover:opacity-90 active:scale-95"
+                : "cursor-default"
             }`}
-            title={collapsed ? 'Expand sidebar' : undefined}
+            title={collapsed ? "Expand sidebar" : undefined}
           >
             {collapsed && isLogoHovered ? (
               <PanelLeft size={16} strokeWidth={2.2} />
@@ -148,7 +169,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
             style={{
               opacity: collapsed ? 0 : 1,
               maxWidth: collapsed ? 0 : 160,
-              pointerEvents: collapsed ? 'none' : 'auto',
+              pointerEvents: collapsed ? "none" : "auto",
             }}
           >
             <span className="sidebar-logo-title">Indo Cab</span>
@@ -159,14 +180,14 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
         <button
           type="button"
           onClick={(e) => {
-            e.stopPropagation()
-            onToggle()
+            e.stopPropagation();
+            onToggle();
           }}
           className="p-1.5 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-900 transition-all duration-150 cursor-pointer shrink-0"
           style={{
             opacity: collapsed ? 0 : 1,
-            pointerEvents: collapsed ? 'none' : 'auto',
-            transform: collapsed ? 'scale(0.8)' : 'scale(1)',
+            pointerEvents: collapsed ? "none" : "auto",
+            transform: collapsed ? "scale(0.8)" : "scale(1)",
           }}
           title="Collapse sidebar"
         >
@@ -187,7 +208,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
         {isProfileMenuOpen && (
           <div
             className={`absolute bottom-[calc(100%+6px)] left-2 right-2 bg-white border border-neutral-200 rounded-lg shadow-xl z-50 animate-fadeIn flex flex-col gap-1 ${
-              collapsed ? 'p-1.5 items-center' : 'p-2'
+              collapsed ? "p-1.5 items-center" : "p-2"
             }`}
           >
             {!collapsed && (
@@ -196,8 +217,12 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
                   SA
                 </div>
                 <div className="flex flex-col min-w-0 text-left">
-                  <span className="font-bold text-xs text-neutral-900 truncate">Super Admin</span>
-                  <span className="text-[10px] text-neutral-400 truncate">admin@indo.cab</span>
+                  <span className="font-bold text-xs text-neutral-900 truncate">
+                    Super Admin
+                  </span>
+                  <span className="text-[10px] text-neutral-400 truncate">
+                    admin@indo.cab
+                  </span>
                 </div>
               </div>
             )}
@@ -210,24 +235,27 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
                 title={collapsed ? label : undefined}
                 className={`w-full rounded-lg transition-colors cursor-pointer text-left flex items-center gap-2.5 ${
                   collapsed
-                    ? 'p-2 justify-center text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
-                    : 'px-3 py-2 text-xs font-semibold text-neutral-700 hover:bg-neutral-100'
+                    ? "p-2 justify-center text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100"
+                    : "px-3 py-2 text-xs font-semibold text-neutral-700 hover:bg-neutral-100"
                 }`}
               >
-                <Icon size={collapsed ? 16 : 14} className={collapsed ? '' : 'text-neutral-500'} />
+                <Icon
+                  size={collapsed ? 16 : 14}
+                  className={collapsed ? "" : "text-neutral-500"}
+                />
                 {!collapsed && <span>{label}</span>}
               </button>
             ))}
 
-            <div className={`bg-neutral-100 ${collapsed ? 'w-full h-px my-0.5' : 'h-px my-0.5'}`} />
+            <div
+              className={`bg-neutral-100 ${collapsed ? "w-full h-px my-0.5" : "h-px my-0.5"}`}
+            />
 
             <button
               type="button"
               onClick={handleLogout}
-              title={collapsed ? 'Log Out' : undefined}
-              className={`btn btn-delete w-full ${
-                collapsed ? 'p-1.5 justify-center' : 'justify-start'
-              }`} 
+              title={collapsed ? "Log Out" : undefined}
+              className={`btn btn-delete w-full }`}
             >
               <LogOut size={collapsed ? 16 : 14} />
               {!collapsed && <span>Log Out</span>}
@@ -240,10 +268,10 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
           onClick={() => setIsProfileMenuOpen((prev) => !prev)}
           className={`w-full h-11 p-1.5 rounded-lg border transition-all cursor-pointer flex items-center group justify-between ${
             isProfileMenuOpen
-              ? 'bg-neutral-100 border-neutral-300'
-              : 'bg-neutral-50/80 hover:bg-neutral-100 border-neutral-200/80'
+              ? "bg-neutral-100 border-neutral-300"
+              : "bg-neutral-50/80 hover:bg-neutral-100 border-neutral-200/80"
           }`}
-          title={collapsed ? 'Admin Profile' : undefined}
+          title={collapsed ? "Admin Profile" : undefined}
         >
           <div className="flex items-center min-w-0">
             <div className="w-8 h-8 rounded-lg bg-[#0D5C4D] text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-2xs">
@@ -269,7 +297,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
           <ChevronUp
             size={12}
             className={`text-neutral-400 group-hover:text-neutral-600 shrink-0 transition-all duration-200 ${
-              isProfileMenuOpen ? 'rotate-180' : ''
+              isProfileMenuOpen ? "rotate-180" : ""
             }`}
             style={{
               opacity: collapsed ? 0 : 1,
@@ -279,7 +307,7 @@ function SidebarComponent({ collapsed, onToggle }: SidebarProps) {
         </button>
       </div>
     </aside>
-  )
+  );
 }
 
-export default React.memo(SidebarComponent)
+export default React.memo(SidebarComponent);

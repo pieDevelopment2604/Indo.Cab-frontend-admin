@@ -55,7 +55,7 @@ function ViewModeTabsComponent<T extends string = string>({
       )}
 
       {/* Right section: View Mode Selector Tabs */}
-      <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+      <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 scrollbar-none shrink-0">
         {tabs.map(({ id, label, icon }) => {
           const isActive = activeTab === id
           return (
@@ -63,7 +63,7 @@ function ViewModeTabsComponent<T extends string = string>({
               key={id}
               type="button"
               onClick={() => onTabChange(id)}
-              className={`btn ${isActive ? 'btn-submit' : 'btn-neutral'}`}
+              className={`btn whitespace-nowrap text-xs ${isActive ? 'btn-submit' : 'btn-neutral'}`}
             >
               {icon}
               <span>{label}</span>

@@ -375,8 +375,8 @@ export default function VendorOnboardingWizard({
 
       {/* Main Container Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Vertical Stepper Navigation (Sticky) */}
-        <div className="lg:col-span-3 sticky top-4 flex flex-col gap-6 card p-5">
+        {/* Left Column: Vertical Stepper Navigation */}
+        <div className="lg:col-span-3 flex flex-col gap-6 card p-5">
           <div className="flex flex-col gap-6 relative">
             {/* Step 1 */}
             <div className="flex items-start gap-3.5 relative">

@@ -82,7 +82,7 @@ function DispatchTabComponent({
       </div>
 
       {/* 4 Dispatch KPI Stat Cards (Using KpiCard Component) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {dispatchKpiCards.map((card) => (
           <KpiCard key={card.id} {...card} />
         ))}
@@ -101,116 +101,142 @@ function DispatchTabComponent({
         </div>
 
         {/* Booking Item Cards List */}
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           {incomingBookings.map((booking) => (
             <div
               key={booking.id}
-              className={`card p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all hover:shadow-md ${
-                booking.isUrgent ? "border-2 border-red-500 bg-red-50/10" : ""
+              className={`bg-white rounded-2xl border p-4 sm:p-5 flex flex-col gap-3.5 transition-all hover:shadow-md ${
+                booking.isUrgent
+                  ? "border-red-400 bg-red-50/10 shadow-xs"
+                  : "border-neutral-200/80 shadow-xs"
               }`}
             >
-              {/* Vehicle Type Icon & Label */}
-              <div className="flex items-center gap-4 min-w-[200px]">
-                <div
-                  className={`w-12 h-12 rounded-md flex items-center justify-center text-xl shrink-0 ${
+              {/* Top Row: Vehicle Type + Assign Vendor Button */}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 ${
+                      booking.isUrgent
+                        ? "bg-red-50 text-red-600 border border-red-100"
+                        : "bg-emerald-50 text-[#0D5C4D] border border-emerald-100/80"
+                    }`}
+                  >
+                    {booking.vehicleCategory === "Truck" ? (
+                      <Truck size={22} strokeWidth={1.8} />
+                    ) : (
+                      <Car size={22} strokeWidth={1.8} />
+                    )}
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-bold text-neutral-900 text-sm sm:text-base leading-snug truncate">
+                      {booking.vehicleType}
+                    </span>
+                    <span className="text-xs text-neutral-400 font-medium truncate">
+                      {booking.isUrgent && booking.urgentMessage ? (
+                        <span className="text-red-600 font-bold uppercase text-[10px] tracking-wide">
+                          {booking.urgentMessage}
+                        </span>
+                      ) : (
+                        "Vehicle Type"
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onAssignVendorClick(booking)}
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer shrink-0 ${
                     booking.isUrgent
-                      ? "bg-red-100 text-red-600"
-                      : "bg-teal-50 text-[#1B6B5C] border border-teal-100"
+                      ? "bg-red-600 hover:bg-red-700 text-white"
+                      : "bg-[#0D5C4D] hover:bg-[#09473b] text-white"
                   }`}
                 >
-                  {booking.vehicleCategory === "Truck" ? (
-                    <Truck size={22} />
-                  ) : (
-                    <Car size={22} />
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  {booking.isUrgent && (
-                    <span className="text-[10px] font-extrabold text-red-600 uppercase tracking-wider mb-0.5">
-                      {booking.urgentMessage}
-                    </span>
-                  )}
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase">
-                    Vehicle Type
-                  </span>
-                  <span className="font-extrabold text-neutral-900 text-sm">
-                    {booking.vehicleType}
-                  </span>
-                </div>
+                  {booking.isUrgent ? "Assign Emergency" : "Assign Vendor"}
+                </button>
               </div>
 
-              {/* Pickup -> Drop Route Details */}
-              <div className="flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-y md:border-y-0 md:border-x border-neutral-100 py-3 md:py-0 md:px-6">
+              {/* Divider */}
+              <div className="border-t border-neutral-100" />
+
+              {/* Middle Row: Pickup -> Drop Route */}
+              <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-start sm:items-center gap-2.5 sm:gap-4">
                 {/* Pickup */}
-                <div className="flex flex-col max-w-[220px]">
-                  <span className="text-[10px] font-extrabold text-neutral-400 uppercase flex items-center gap-1">
-                    <MapPin size={11} className="text-[#1B6B5C]" /> PICKUP
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[11px] font-bold text-[#0D5C4D] uppercase flex items-center gap-1.5 tracking-wider">
+                    <MapPin size={13} className="text-[#0D5C4D] shrink-0" /> PICKUP
                   </span>
-                  <span className="font-bold text-neutral-900 text-xs mt-0.5">
+                  <span className="font-bold text-xs sm:text-[13px] text-neutral-900 mt-1 leading-snug">
                     {booking.pickup.title}
                   </span>
-                  <span className="text-[11px] text-neutral-400 leading-tight">
+                  <span className="text-[11px] text-neutral-400 leading-tight mt-0.5">
                     {booking.pickup.address}
                   </span>
                 </div>
 
-                <ArrowRight
-                  size={18}
-                  className="text-neutral-300 hidden sm:block shrink-0"
-                />
+                {/* Route Arrow */}
+                <div className="hidden sm:flex items-center justify-center px-1">
+                  <ArrowRight size={18} className="text-neutral-300 shrink-0" />
+                </div>
 
                 {/* Drop */}
-                <div className="flex flex-col max-w-[220px]">
-                  <span className="text-[10px] font-extrabold text-neutral-400 uppercase flex items-center gap-1">
-                    <Navigation size={11} className="text-teal-600" /> DROP
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[11px] font-bold text-[#0D5C4D] uppercase flex items-center gap-1.5 tracking-wider">
+                    <Navigation size={13} className="text-[#0D5C4D] shrink-0" /> DROP
                   </span>
-                  <span className="font-bold text-neutral-900 text-xs mt-0.5">
+                  <span className="font-bold text-xs sm:text-[13px] text-neutral-900 mt-1 leading-snug">
                     {booking.drop.title}
                   </span>
-                  <span className="text-[11px] text-neutral-400 leading-tight">
+                  <span className="text-[11px] text-neutral-400 leading-tight mt-0.5">
                     {booking.drop.address}
                   </span>
                 </div>
               </div>
 
-              {/* Schedule & Action Buttons */}
-              <div className="flex items-center gap-5 w-full md:w-auto justify-between md:justify-end">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase">
-                    Schedule
-                  </span>
-                  <span className="font-extrabold text-neutral-900 text-xs">
-                    {booking.schedule.time}
-                  </span>
-                  <span
-                    className={`text-[10px] font-bold mt-0.5 flex items-center gap-1 ${
-                      booking.schedule.isOverdue
-                        ? "text-red-600"
-                        : "text-amber-600"
+              {/* Divider */}
+              <div className="border-t border-neutral-100" />
+
+              {/* Bottom Row: Schedule, Due Time, and Delete Button */}
+              <div className="flex items-center justify-between gap-3">
+                {/* Schedule Info */}
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <Calendar size={18} className="text-[#0D5C4D] shrink-0" strokeWidth={1.8} />
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-[10px] font-extrabold uppercase text-[#0D5C4D] tracking-wider leading-none">
+                      SCHEDULE
+                    </span>
+                    <span className="text-xs sm:text-sm font-bold text-neutral-900 mt-0.5 leading-tight truncate">
+                      {booking.schedule.time}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Due in X mins badge */}
+                <div className="flex items-center gap-1.5 text-xs font-bold shrink-0">
+                  <Clock
+                    size={15}
+                    className={`shrink-0 ${
+                      booking.schedule.isOverdue ? "text-red-500" : "text-amber-500"
                     }`}
+                  />
+                  <span
+                    className={
+                      booking.schedule.isOverdue ? "text-red-600" : "text-amber-600"
+                    }
                   >
-                    <Clock size={11} /> {booking.schedule.dueNote}
+                    {booking.schedule.dueNote}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onDeleteBooking(booking.id)}
-                    className="icon-btn icon-btn-delete"
-                    title="Delete booking"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => onAssignVendorClick(booking)}
-                    className={`btn ${booking.isUrgent ? "btn-delete" : "btn-submit"}`}
-                  >
-                    {booking.isUrgent ? "Assign Emergency" : "Assign Vendor"}
-                  </button>
-                </div>
+                {/* Delete / Cancel Button */}
+                <button
+                  type="button"
+                  onClick={() => onDeleteBooking(booking.id)}
+                  className="w-9 h-9 rounded-xl bg-rose-50/80 hover:bg-rose-100 border border-rose-200/90 text-rose-500 hover:text-rose-600 flex items-center justify-center transition-colors cursor-pointer shrink-0 shadow-2xs"
+                  title="Delete booking"
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
             </div>
           ))}

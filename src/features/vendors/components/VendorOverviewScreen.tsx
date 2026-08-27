@@ -237,7 +237,7 @@ function VendorOverviewScreen({
       </div>
 
       {/* 4 KPI Stat Cards (Using KpiCard Component) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {kpiCards.map((card) => (
           <KpiCard key={card.id} {...card} />
         ))}

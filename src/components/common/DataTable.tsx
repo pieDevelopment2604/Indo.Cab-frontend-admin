@@ -1,48 +1,48 @@
-import React from 'react'
-import { ChevronLeft, ChevronRight, Search } from '@/utils/icons'
-import StatusBadge from './StatusBadge'
+import React from "react";
+import { ChevronLeft, ChevronRight, Search } from "@/utils/icons";
+import StatusBadge from "./StatusBadge";
 
 export interface Column<T> {
-  header: string
-  accessorKey?: keyof T
-  cell?: (row: T) => React.ReactNode
-  className?: string
-  headerClassName?: string
-  align?: 'left' | 'center' | 'right'
+  header: string;
+  accessorKey?: keyof T;
+  cell?: (row: T) => React.ReactNode;
+  className?: string;
+  headerClassName?: string;
+  align?: "left" | "center" | "right";
 }
 
 export interface FilterOption {
-  key: string
-  label: string
-  count?: number
+  key: string;
+  label: string;
+  count?: number;
 }
 
 export interface DataTableProps<T> {
-  data: T[]
-  columns: Column<T>[]
-  keyExtractor: (row: T) => string | number
-  onRowClick?: (row: T) => void
-  emptyMessage?: string
-  emptyIcon?: React.ReactNode
-  isLoading?: boolean
+  data: T[];
+  columns: Column<T>[];
+  keyExtractor: (row: T) => string | number;
+  onRowClick?: (row: T) => void;
+  emptyMessage?: string;
+  emptyIcon?: React.ReactNode;
+  isLoading?: boolean;
 
   // Optional Integrated Toolbar Props
-  searchQuery?: string
-  onSearchChange?: (query: string) => void
-  searchPlaceholder?: string
-  filterOptions?: FilterOption[]
-  selectedFilter?: string
-  onFilterChange?: (filterKey: string) => void
-  actionButtons?: React.ReactNode
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  searchPlaceholder?: string;
+  filterOptions?: FilterOption[];
+  selectedFilter?: string;
+  onFilterChange?: (filterKey: string) => void;
+  actionButtons?: React.ReactNode;
 
   // Optional Pagination
   pagination?: {
-    currentPage: number
-    totalPages: number
-    onPageChange: (page: number) => void
-    totalItems: number
-    pageSize: number
-  }
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+    totalItems: number;
+    pageSize: number;
+  };
 }
 
 export default function DataTable<T>({
@@ -50,7 +50,7 @@ export default function DataTable<T>({
   columns,
   keyExtractor,
   onRowClick,
-  emptyMessage = 'No records found',
+  emptyMessage = "No records found",
   emptyIcon,
   isLoading = false,
   searchQuery,
@@ -60,33 +60,39 @@ export default function DataTable<T>({
   selectedFilter,
   onFilterChange,
   actionButtons,
-  pagination
+  pagination,
 }: DataTableProps<T>) {
-  const hasToolbar = onSearchChange !== undefined || (filterOptions && filterOptions.length > 0) || actionButtons !== undefined
+  const hasToolbar =
+    onSearchChange !== undefined ||
+    (filterOptions && filterOptions.length > 0) ||
+    actionButtons !== undefined;
 
   return (
-    <div className="card overflow-hidden flex flex-col flex-1 min-h-[400px]">
+    <div className="card overflow-hidden flex flex-col flex-1 min-h-[700px]">
       {/* Integrated Search, Filter Options & Actions Toolbar */}
       {hasToolbar && (
         <div className="px-5 py-3.5 border-b border-neutral-100 bg-white flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
             {onSearchChange !== undefined && (
-               <div className="relative w-full sm:w-[320px]">
-                 <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
-                 <input
-                   type="text"
-                   placeholder={searchPlaceholder || 'Search records...'}
-                   value={searchQuery || ''}
-                   onChange={(e) => onSearchChange(e.target.value)}
-                   className="w-full pl-9 pr-4 py-2 text-[13px] border border-neutral-200 rounded-lg bg-white text-neutral-900 outline-none focus:border-neutral-300 focus:ring-4 focus:ring-neutral-100 transition-all placeholder:text-neutral-400 shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
-                 />
-               </div>
+              <div className="relative w-full sm:w-[320px]">
+                <Search
+                  size={16}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400"
+                />
+                <input
+                  type="text"
+                  placeholder={searchPlaceholder || "Search records..."}
+                  value={searchQuery || ""}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 text-[13px] border border-neutral-200 rounded-lg bg-white text-neutral-900 outline-none focus:border-neutral-300 focus:ring-4 focus:ring-neutral-100 transition-all placeholder:text-neutral-400 shadow-[0_1px_2px_rgba(0,0,0,0.02)]"
+                />
+              </div>
             )}
 
             {filterOptions && onFilterChange && (
               <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
                 {filterOptions.map((opt) => {
-                  const isActive = selectedFilter === opt.key
+                  const isActive = selectedFilter === opt.key;
                   return (
                     <button
                       key={opt.key}
@@ -94,28 +100,34 @@ export default function DataTable<T>({
                       onClick={() => onFilterChange(opt.key)}
                       className={`px-3.5 py-1.5 rounded-lg text-[13px] font-medium whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
                         isActive
-                          ? 'bg-neutral-100 text-neutral-900 font-semibold'
-                          : 'bg-transparent text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700'
+                          ? "bg-neutral-100 text-neutral-900 font-semibold"
+                          : "bg-transparent text-neutral-500 hover:bg-neutral-50 hover:text-neutral-700"
                       }`}
                     >
                       <span>{opt.label}</span>
                       {opt.count !== undefined && (
                         <span
                           className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-                            isActive ? 'bg-white border border-neutral-200 text-neutral-800 shadow-sm' : 'bg-neutral-100 text-neutral-500'
+                            isActive
+                              ? "bg-white border border-neutral-200 text-neutral-800 shadow-sm"
+                              : "bg-neutral-100 text-neutral-500"
                           }`}
                         >
                           {opt.count}
                         </span>
                       )}
                     </button>
-                  )
+                  );
                 })}
               </div>
             )}
           </div>
 
-          {actionButtons && <div className="flex items-center gap-2 shrink-0">{actionButtons}</div>}
+          {actionButtons && (
+            <div className="flex items-center gap-2 shrink-0">
+              {actionButtons}
+            </div>
+          )}
         </div>
       )}
 
@@ -128,8 +140,12 @@ export default function DataTable<T>({
                 {columns.map((col, idx) => (
                   <th
                     key={idx}
-                    className={`py-3 px-5 tracking-wide ${col.headerClassName || ''} ${
-                      col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
+                    className={`py-3 px-5 tracking-wide ${col.headerClassName || ""} ${
+                      col.align === "right"
+                        ? "text-right"
+                        : col.align === "center"
+                          ? "text-center"
+                          : "text-left"
                     }`}
                   >
                     {col.header}
@@ -143,13 +159,24 @@ export default function DataTable<T>({
                   {columns.map((col, colIdx) => (
                     <td
                       key={colIdx}
-                      className={`py-4 px-5 ${col.className || ''} ${
-                        col.align === 'right' ? 'flex justify-end' : col.align === 'center' ? 'flex justify-center' : ''
+                      className={`py-4 px-5 ${col.className || ""} ${
+                        col.align === "right"
+                          ? "flex justify-end"
+                          : col.align === "center"
+                            ? "flex justify-center"
+                            : ""
                       }`}
                     >
-                      <div 
-                        className="h-4 bg-neutral-200/70 rounded animate-pulse" 
-                        style={{ width: colIdx === 0 ? '60%' : colIdx === columns.length - 1 ? '30%' : '80%' }}
+                      <div
+                        className="h-4 bg-neutral-200/70 rounded animate-pulse"
+                        style={{
+                          width:
+                            colIdx === 0
+                              ? "60%"
+                              : colIdx === columns.length - 1
+                                ? "30%"
+                                : "80%",
+                        }}
                       ></div>
                     </td>
                   ))}
@@ -161,8 +188,12 @@ export default function DataTable<T>({
       ) : data.length === 0 ? (
         /* Empty State */
         <div className="p-16 text-center flex flex-col items-center justify-center gap-3 bg-white">
-          {emptyIcon && <div className="text-neutral-300 mb-1">{emptyIcon}</div>}
-          <h3 className="text-[13px] font-medium text-neutral-500">{emptyMessage}</h3>
+          {emptyIcon && (
+            <div className="text-neutral-300 mb-1">{emptyIcon}</div>
+          )}
+          <h3 className="text-[13px] font-medium text-neutral-500">
+            {emptyMessage}
+          </h3>
         </div>
       ) : (
         /* Table Content */
@@ -173,8 +204,12 @@ export default function DataTable<T>({
                 {columns.map((col, idx) => (
                   <th
                     key={idx}
-                    className={`py-3 px-5 tracking-wide ${col.headerClassName || ''} ${
-                      col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
+                    className={`py-3 px-5 tracking-wide ${col.headerClassName || ""} ${
+                      col.align === "right"
+                        ? "text-right"
+                        : col.align === "center"
+                          ? "text-center"
+                          : "text-left"
                     }`}
                   >
                     {col.header}
@@ -189,23 +224,30 @@ export default function DataTable<T>({
                   key={keyExtractor(row)}
                   onClick={() => onRowClick && onRowClick(row)}
                   className={`transition-colors group ${
-                    onRowClick ? 'hover:bg-neutral-50/80 cursor-pointer' : 'hover:bg-neutral-50/50'
+                    onRowClick
+                      ? "hover:bg-neutral-50/80 cursor-pointer"
+                      : "hover:bg-neutral-50/50"
                   }`}
                 >
                   {columns.map((col, idx) => (
                     <td
                       key={idx}
-                      className={`py-4 px-6 ${col.className || ''} ${
-                        col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : 'text-left'
+                      className={`py-4 px-6 ${col.className || ""} ${
+                        col.align === "right"
+                          ? "text-right"
+                          : col.align === "center"
+                            ? "text-center"
+                            : "text-left"
                       }`}
                     >
                       {col.cell ? (
                         col.cell(row)
                       ) : col.accessorKey ? (
-                        col.accessorKey === 'status' && typeof row[col.accessorKey] === 'string' ? (
+                        col.accessorKey === "status" &&
+                        typeof row[col.accessorKey] === "string" ? (
                           <StatusBadge status={String(row[col.accessorKey])} />
                         ) : (
-                          String(row[col.accessorKey] ?? '')
+                          String(row[col.accessorKey] ?? "")
                         )
                       ) : null}
                     </td>
@@ -221,16 +263,33 @@ export default function DataTable<T>({
       {pagination && !isLoading && data.length > 0 && (
         <div className="px-5 py-3.5 border-t border-neutral-100 bg-white flex flex-col sm:flex-row justify-between items-center gap-3 text-[12px] text-neutral-500 font-medium">
           <span>
-            Showing <strong className="text-neutral-800">{Math.min((pagination.currentPage - 1) * pagination.pageSize + 1, pagination.totalItems)}</strong> to{' '}
-            <strong className="text-neutral-800">{Math.min(pagination.currentPage * pagination.pageSize, pagination.totalItems)}</strong> of{' '}
-            <strong className="text-neutral-800">{pagination.totalItems}</strong>
+            Showing{" "}
+            <strong className="text-neutral-800">
+              {Math.min(
+                (pagination.currentPage - 1) * pagination.pageSize + 1,
+                pagination.totalItems,
+              )}
+            </strong>{" "}
+            to{" "}
+            <strong className="text-neutral-800">
+              {Math.min(
+                pagination.currentPage * pagination.pageSize,
+                pagination.totalItems,
+              )}
+            </strong>{" "}
+            of{" "}
+            <strong className="text-neutral-800">
+              {pagination.totalItems}
+            </strong>
           </span>
 
           <div className="flex items-center gap-1.5">
             <button
               type="button"
               disabled={pagination.currentPage === 1}
-              onClick={() => pagination.onPageChange(pagination.currentPage - 1)}
+              onClick={() =>
+                pagination.onPageChange(pagination.currentPage - 1)
+              }
               className="icon-btn icon-btn-secondary icon-btn-sm"
               title="Previous Page"
             >
@@ -244,7 +303,9 @@ export default function DataTable<T>({
             <button
               type="button"
               disabled={pagination.currentPage === pagination.totalPages}
-              onClick={() => pagination.onPageChange(pagination.currentPage + 1)}
+              onClick={() =>
+                pagination.onPageChange(pagination.currentPage + 1)
+              }
               className="icon-btn icon-btn-secondary icon-btn-sm"
               title="Next Page"
             >
@@ -254,5 +315,5 @@ export default function DataTable<T>({
         </div>
       )}
     </div>
-  )
+  );
 }

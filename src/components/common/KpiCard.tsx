@@ -32,7 +32,6 @@ function KpiCardComponent({
         </div>
         {badge && <span className={`text-[11px] ${badgeStyle}`}>{badge}</span>}
         {subnote && <div className={`${subnoteStyle}`}>{subnote}</div>}
-
       </div>
 
       <div>

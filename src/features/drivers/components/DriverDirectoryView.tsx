@@ -323,34 +323,34 @@ export default function DriverDirectoryView({
       align: 'right',
       cell: (row) => (
         <div
-          className="flex items-center justify-end gap-1.5"
+          className="flex items-center justify-end gap-2"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             type="button"
             onClick={() => onSelectDriver(row)}
-            className="p-1.5 rounded-lg text-neutral-500 hover:text-[#0E453B] hover:bg-[#D0EDE8]/30 transition-colors"
+            className="icon-btn icon-btn-secondary"
             title="View full driver details"
           >
-            <Eye size={15} />
+            <Eye size={16} />
           </button>
 
           <button
             type="button"
             onClick={() => onEditDriver(row)}
-            className="p-1.5 rounded-lg text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+            className="icon-btn icon-btn-edit"
             title="Edit driver profile"
           >
-            <Edit size={15} />
+            <Edit size={16} />
           </button>
 
           <button
             type="button"
             onClick={() => onDeleteDriver(row.id)}
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-            title="Delete / Offboard driver"
+            className="icon-btn icon-btn-delete"
+            title="Delete driver"
           >
-            <Trash2 size={15} />
+            <Trash2 size={16} />
           </button>
         </div>
       ),

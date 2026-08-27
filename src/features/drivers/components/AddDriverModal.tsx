@@ -152,7 +152,8 @@ export default function AddDriverModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+            className="icon-btn icon-btn-sm text-neutral-400 hover:text-neutral-600"
+            title="Close Modal"
           >
             <X size={18} />
           </button>

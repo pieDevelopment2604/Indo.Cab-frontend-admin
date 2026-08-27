@@ -5,12 +5,50 @@ html, body {
   overflow: hidden;
 }
 
+:root {
+  --sidebar-offset: 0px;
+  --header-left-offset: 0px;
+}
+
+@media (max-width: 1023px) {
+  :root, .app-shell {
+    --sidebar-offset: 0px !important;
+    --header-left-offset: 0px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --sidebar-offset: 256px;
+    --header-left-offset: 256px;
+  }
+}
+
 .app-shell {
   display: flex;
   height: 100vh;
   min-height: 100vh;
   background: var(--bg-app);
   overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.app-main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+  width: 100%;
+  margin-left: 0;
+  transition: margin-left 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 1024px) {
+  .app-main-wrapper {
+    margin-left: var(--sidebar-offset, 256px);
+  }
 }
 
 /* ── Sidebar ── */
@@ -20,13 +58,19 @@ html, body {
   left: 0;
   height: 100vh;
   background: #ffffff;
-  display: flex;
+  display: none;
   flex-direction: column;
   transition: width 0.26s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   z-index: 40;
   box-shadow: 1px 0 0 var(--border-default);
   will-change: width;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    display: flex;
+  }
 }
 
 /* Logo area */
@@ -243,8 +287,6 @@ html, body {
   color: var(--text-primary);
 }
 
-/* Header / Topbar styles converted to Tailwind CSS in Header.tsx */
-
 .main-content {
   margin-top: 58px;
   flex: 1;
@@ -252,6 +294,8 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-width: 0;
+  width: 100%;
 }
 
 .page-wrapper {
@@ -259,5 +303,65 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: 24px;
+  overflow-x: hidden;
+  padding: 14px;
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 24px);
 }
+
+@media (min-width: 640px) {
+  .page-wrapper {
+    padding: 18px;
+    padding-bottom: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-wrapper {
+    padding: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+/* Slide left drawer animation */
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slideLeft {
+  animation: slideLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Slide up drawer animation */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+

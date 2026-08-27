@@ -74,7 +74,8 @@ export default function DriverDetailDrawer({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-xl text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+              className="icon-btn icon-btn-sm text-neutral-400 hover:text-neutral-600"
+              title="Close Drawer"
             >
               <X size={20} />
             </button>

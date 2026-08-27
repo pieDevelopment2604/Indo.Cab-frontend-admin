@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import Header from './Header'
+import RightSidebarDrawer from './RightSidebarDrawer'
 import './layout.css'
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false)
+  const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false)
   const location = useLocation()
   const mainContentRef = useRef<HTMLElement>(null)
 
@@ -16,29 +18,53 @@ export default function AppLayout() {
     }
   }, [location.pathname])
 
+  const sidebarWidth = collapsed ? 64 : 256
+
+  const handleToggleRightDrawer = useCallback(() => {
+    setIsRightDrawerOpen((prev) => !prev)
+  }, [])
+
+  const handleCloseRightDrawer = useCallback(() => {
+    setIsRightDrawerOpen(false)
+  }, [])
+
   return (
-    <div className="app-shell">
+    <div
+      className="app-shell"
+      style={
+        {
+          '--sidebar-offset': `${sidebarWidth}px`,
+          '--header-left-offset': `${sidebarWidth}px`,
+        } as React.CSSProperties
+      }
+    >
+      {/* Desktop Sidebar (hidden on tablet & mobile) */}
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed((c) => !c)}
       />
-      <div
-        style={{
-          marginLeft: collapsed ? 64 : 256,
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh',
-          transition: 'margin-left 0.26s cubic-bezier(0.4, 0, 0.2, 1)',
-        }}
-      >
-        <Header sidebarCollapsed={collapsed} onToggleSidebar={() => setCollapsed((c) => !c)} />
+
+      {/* Main App Content Area */}
+      <div className="app-main-wrapper">
+        <Header
+          sidebarCollapsed={collapsed}
+          onToggleSidebar={() => setCollapsed((c) => !c)}
+          isRightDrawerOpen={isRightDrawerOpen}
+          onToggleRightDrawer={handleToggleRightDrawer}
+        />
         <main className="main-content" ref={mainContentRef}>
           <div className="page-wrapper">
             <Outlet />
           </div>
         </main>
       </div>
+
+      {/* Right-Side Navigation Drawer (Mobile, Tablet & Profile Click) */}
+      <RightSidebarDrawer
+        isOpen={isRightDrawerOpen}
+        onClose={handleCloseRightDrawer}
+      />
     </div>
   )
 }
+

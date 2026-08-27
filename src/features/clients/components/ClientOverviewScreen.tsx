@@ -240,12 +240,16 @@ export default function ClientOverviewScreen({
         </div>
 
         {canManageClients && (
-          <AddButton label="Add New Client" onClick={onAddClientClick} className="btn-submit" />
+          <AddButton
+            label="Add New Client"
+            onClick={onAddClientClick}
+            className="btn-submit"
+          />
         )}
       </div>
 
       {/* 4 Reusable KpiCard Components Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <KpiCard
           title="TOTAL CLIENTS"
           value={clients.length}
