@@ -4,17 +4,13 @@ import { useDispatch } from "react-redux";
 import { clearAuth } from "@/store/authSlice";
 import {
   X,
-  MapPin,
   ChevronDown,
   User,
   Settings,
   HelpCircle,
   LogOut,
-  Navigation2,
-  ChevronRight,
 } from "@/utils/icons";
 import { NAV_ITEMS, NAV_GROUPS } from "@/constants/navigation";
-import { ROUTES } from "@/constants/routes";
 
 interface RightSidebarDrawerProps {
   isOpen: boolean;
@@ -29,8 +25,6 @@ export default function RightSidebarDrawer({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
-  const [selectedHub, setSelectedHub] = useState("Jakarta Central Hub");
-  const [isHubDropdownOpen, setIsHubDropdownOpen] = useState(false);
   const prevPathRef = useRef(location.pathname);
 
   // Close drawer ONLY when the route actually changes
